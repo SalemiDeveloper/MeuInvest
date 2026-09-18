@@ -1,0 +1,47 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+#[Fillable([
+    'investment_import_id',
+    'product',
+    'institution',
+    'issuer',
+    'code',
+    'indexer',
+    'issued_at',
+    'maturity_date',
+    'curve_value',
+])]
+class InvestmentPosition extends Model
+{
+    /** @use HasFactory */
+    use HasFactory;
+
+    /**
+     * Get the import that owns the investment position.
+     */
+    public function investmentImport(): BelongsTo
+    {
+        return $this->belongsTo(InvestmentImport::class);
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'issued_at' => 'date',
+            'maturity_date' => 'date',
+            'curve_value' => 'decimal:2',
+        ];
+    }
+}
