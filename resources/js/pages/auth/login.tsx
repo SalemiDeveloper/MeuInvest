@@ -65,8 +65,8 @@ export default function Login({ status, canResetPassword }: Props) {
                                     name="password"
                                     required
                                     tabIndex={2}
-                                    autoComplete="Sua senha"
-                                    placeholder="Senha"
+                                    autoComplete="password"
+                                    placeholder="Sua senha"
                                 />
                                 <InputError message={errors.password} />
                             </div>
@@ -82,7 +82,7 @@ export default function Login({ status, canResetPassword }: Props) {
 
                             <Button
                                 type="submit"
-                                className="mt-4 w-full"
+                                className="cursor-pointer mt-4 w-full"
                                 tabIndex={4}
                                 disabled={processing}
                                 data-test="login-button"
