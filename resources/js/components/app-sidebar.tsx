@@ -10,6 +10,7 @@ import {
     ChartNoAxesCombined,
     ChartLine, 
     CircleDollarSign,
+    CircleHelp,
 } from 'lucide-react';
 import {
     Sidebar,
@@ -54,6 +55,11 @@ const mainNavItems: NavItem[] = [
         title: 'Análise Individual',
         href: '/investments/analysis/positions',
         icon: CircleDollarSign,
+    },
+    {
+        title: 'Como funciona',
+        href: '/instructions',
+        icon: CircleHelp,
     },
 ];
 

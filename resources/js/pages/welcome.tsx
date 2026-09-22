@@ -100,15 +100,25 @@ export default function Welcome() {
 
                         {/* How it works */}
                         <div className="mt-24 border-t border-border/60 pt-10">
-                            <div className="mb-10">
-                                <h2 className="text-xl font-semibold tracking-tight">
-                                    Como funciona
-                                </h2>
+                            <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                                <div>
+                                    <h2 className="text-xl font-semibold tracking-tight">
+                                        Como funciona
+                                    </h2>
 
-                                <p className="mt-2 text-sm text-muted-foreground">
-                                    Um fluxo simples para acompanhar seus investimentos
-                                    ao longo do tempo.
-                                </p>
+                                    <p className="mt-2 text-sm text-muted-foreground">
+                                        Um fluxo simples para acompanhar seus investimentos
+                                        ao longo do tempo.
+                                    </p>
+                                </div>
+
+                                <Link
+                                    href="/instructions"
+                                    className="inline-flex items-center gap-2 text-sm font-medium transition-opacity hover:opacity-70"
+                                >
+                                    Ver guia completo
+                                    <ArrowRight className="size-4" />
+                                </Link>
                             </div>
 
                             <div className="grid gap-8 md:grid-cols-3">
