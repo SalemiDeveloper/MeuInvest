@@ -48,7 +48,12 @@ class InvestmentImportController extends Controller
         InvestmentReportImporter $importer
     ): RedirectResponse {
         $validated = $request->validate([
-            'file' => [
+            'files' => [
+                'required',
+                'array',
+                'min:1',
+            ],
+            'files.*' => [
                 'required',
                 'file',
                 'mimes:xlsx',
@@ -56,122 +61,142 @@ class InvestmentImportController extends Controller
             ],
         ]);
 
-        $file = $validated['file'];
+        $results = [];
 
-        try {
-            /*
-             * 1. Extrai o período de referência a partir
-             * do nome original do arquivo.
-             */
-            $period = $importer->extractReferencePeriod(
-                $file->getClientOriginalName()
-            );
+        foreach ($validated['files'] as $file) {
+            $temporaryPath = null;
 
-            $referencePeriod = CarbonImmutable::create(
-                $period['year'],
-                $period['month'],
-                1
-            )->startOfMonth();
+            try {
+                /*
+                * 1. Extrai o período de referência a partir
+                * do nome original do arquivo.
+                */
+                $period = $importer->extractReferencePeriod(
+                    $file->getClientOriginalName()
+                );
 
-            /*
-             * 2. Salva temporariamente o arquivo para que
-             * o PhpSpreadsheet possa abri-lo.
-             */
-            $temporaryPath = $file->store(
-                'investment-reports/tmp'
-            );
+                $referencePeriod = CarbonImmutable::create(
+                    $period['year'],
+                    $period['month'],
+                    1
+                )->startOfMonth();
 
-            $absolutePath = Storage::path($temporaryPath);
+                /*
+                * 2. Salva temporariamente o arquivo para que
+                * o PhpSpreadsheet possa abri-lo.
+                */
+                $temporaryPath = $file->store(
+                    'investment-reports/tmp'
+                );
 
-            /*
-             * 3. Lê a aba e extrai as posições.
-             */
-            $worksheet = $importer->loadWorksheet($absolutePath);
-            $positions = $importer->extractPositions($worksheet);
+                $absolutePath = Storage::path($temporaryPath);
 
-            if ($positions === []) {
-                Storage::delete($temporaryPath);
+                /*
+                * 3. Lê a aba e extrai as posições.
+                */
+                $worksheet = $importer->loadWorksheet($absolutePath);
+                $positions = $importer->extractPositions($worksheet);
 
-                return back()->withErrors([
-                    'file' => 'O relatório não contém posições de renda fixa.',
-                ]);
-            }
-
-            /*
-             * 4. Diretório definitivo do relatório.
-             */
-            $directory = sprintf(
-                'investment-reports/%d/%s',
-                $request->user()->id,
-                $referencePeriod->format('Y-m')
-            );
-
-            $storedPath = $file->store($directory);
-
-            /*
-             * 5. Substitui a importação do mesmo período,
-             * caso ela já exista.
-             */
-            DB::transaction(function () use (
-                $request,
-                $referencePeriod,
-                $file,
-                $storedPath,
-                $positions
-            ): void {
-                $existingImport = InvestmentImport::query()
-                    ->where('user_id', $request->user()->id)
-                    ->whereDate('reference_period', $referencePeriod)
-                    ->first();
-
-                if ($existingImport) {
-                    $oldStoredPath = $existingImport->stored_path;
-
-                    $existingImport->delete();
-
-                    if (
-                        $oldStoredPath !== $storedPath &&
-                        Storage::exists($oldStoredPath)
-                    ) {
-                        Storage::delete($oldStoredPath);
-                    }
+                if ($positions === []) {
+                    throw new RuntimeException(
+                        'O relatório não contém posições de renda fixa.'
+                    );
                 }
 
-                $investmentImport = InvestmentImport::create([
-                    'user_id' => $request->user()->id,
-                    'reference_period' => $referencePeriod,
-                    'original_filename' => $file->getClientOriginalName(),
-                    'stored_path' => $storedPath,
-                ]);
-
-                $investmentImport->positions()->createMany($positions);
-            });
-
-            /*
-             * 6. Remove o arquivo temporário.
-             */
-            Storage::delete($temporaryPath);
-
-            return to_route('investments.import.create')
-                ->with(
-                    'success',
-                    sprintf(
-                        'Relatório de %s importado com sucesso. %d posições foram processadas.',
-                        $referencePeriod->translatedFormat('F \d\e Y'),
-                        count($positions)
-                    )
+                /*
+                * 4. Diretório definitivo do relatório.
+                */
+                $directory = sprintf(
+                    'investment-reports/%d/%s',
+                    $request->user()->id,
+                    $referencePeriod->format('Y-m')
                 );
-        } catch (InvalidArgumentException|RuntimeException $exception) {
-            return back()->withErrors([
-                'file' => $exception->getMessage(),
-            ]);
-        } catch (Throwable $exception) {
-            report($exception);
 
-            return back()->withErrors([
-                'file' => 'Não foi possível processar o relatório. Verifique o arquivo e tente novamente.',
-            ]);
+                $storedPath = $file->store($directory);
+
+                /*
+                * 5. Substitui a importação do mesmo período,
+                * caso ela já exista.
+                */
+                DB::transaction(function () use (
+                    $request,
+                    $referencePeriod,
+                    $file,
+                    $storedPath,
+                    $positions
+                ): void {
+                    $existingImport = InvestmentImport::query()
+                        ->where('user_id', $request->user()->id)
+                        ->whereDate('reference_period', $referencePeriod)
+                        ->first();
+
+                    if ($existingImport) {
+                        $oldStoredPath = $existingImport->stored_path;
+
+                        $existingImport->delete();
+
+                        if (
+                            $oldStoredPath !== $storedPath &&
+                            Storage::exists($oldStoredPath)
+                        ) {
+                            Storage::delete($oldStoredPath);
+                        }
+                    }
+
+                    $investmentImport = InvestmentImport::create([
+                        'user_id' => $request->user()->id,
+                        'reference_period' => $referencePeriod,
+                        'original_filename' => $file->getClientOriginalName(),
+                        'stored_path' => $storedPath,
+                    ]);
+
+                    $investmentImport->positions()->createMany($positions);
+                });
+
+                /*
+                * 6. Remove o arquivo temporário.
+                */
+                Storage::delete($temporaryPath);
+                $temporaryPath = null;
+
+                $results[] = [
+                    'filename' => $file->getClientOriginalName(),
+                    'success' => true,
+                    'message' => sprintf(
+                        'Relatório de %s importado com sucesso.',
+                        $referencePeriod->translatedFormat('F \d\e Y')
+                    ),
+                    'positions_count' => count($positions),
+                ];
+            } catch (InvalidArgumentException|RuntimeException $exception) {
+                if ($temporaryPath !== null) {
+                    Storage::delete($temporaryPath);
+                }
+
+                $results[] = [
+                    'filename' => $file->getClientOriginalName(),
+                    'success' => false,
+                    'message' => $exception->getMessage(),
+                    'positions_count' => 0,
+                ];
+            } catch (Throwable $exception) {
+                if ($temporaryPath !== null) {
+                    Storage::delete($temporaryPath);
+                }
+
+                report($exception);
+
+                $results[] = [
+                    'filename' => $file->getClientOriginalName(),
+                    'success' => false,
+                    'message' => 'Não foi possível processar o relatório. Verifique o arquivo e tente novamente.',
+                    'positions_count' => 0,
+                ];
+            }
         }
+
+        return to_route('investments.import.create')
+            ->with('import_results', $results);
     }
 
     public function destroy(int $id): RedirectResponse

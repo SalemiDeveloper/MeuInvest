@@ -1,45 +1,73 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, useEffect, useRef } from 'react';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import { FileSpreadsheet, Upload } from 'lucide-react';
 
-export default function Import() {
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [error, setError] = useState<string | null>(null);
+type ImportResult = {
+    filename: string;
+    success: boolean;
+    message: string;
+    positions_count: number;
+};
 
-    const { flash } = usePage<{
+export default function Import() {
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+    const [error, setError] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const { flash, import_results } = usePage<{
         flash: {
             success?: string;
         };
+        import_results?: ImportResult[];
     }>().props;
 
     const { setData, post, processing, errors } = useForm<{
-        file: File | null;
+        files: File[];
     }>({
-        file: null,
+        files: [],
     });
 
+    useEffect(() => {
+        if (import_results) {
+            setSelectedFiles([]);
+            setData('files', []);
+
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '';
+            }
+        }
+    }, [import_results, setData]);
+
     function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
-        const file = event.target.files?.[0];
+        const files = Array.from(event.target.files ?? []);
 
         setError(null);
-        setSelectedFile(null);
+        setSelectedFiles([]);
+        setData('files', []);
 
-        if (!file) {
+        if (files.length === 0) {
             return;
         }
 
-        const isXlsx =
-            file.name.toLowerCase().endsWith('.xlsx') ||
-            file.type ===
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        const invalidFile = files.find((file) => {
+            const isXlsx =
+                file.name.toLowerCase().endsWith('.xlsx') ||
+                file.type ===
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
-        if (!isXlsx) {
-            setError('Selecione um arquivo no formato .xlsx.');
+            return !isXlsx;
+        });
+
+        if (invalidFile) {
+            setError(
+                `O arquivo "${invalidFile.name}" não está no formato .xlsx.`,
+            );
+
             return;
         }
 
-        setSelectedFile(file);
-        setData('file', file);
+        setSelectedFiles(files);
+        setData('files', files);
     }
 
     function handleSubmit() {
@@ -64,9 +92,52 @@ export default function Import() {
                     </p>
                 </div>
 
-                {flash.success && (
-                    <div className="max-w-3xl rounded-lg border border-green-500/30 bg-green-500/10 p-4 text-sm text-green-700 dark:text-green-400">
-                        {flash.success}
+                {import_results && import_results.length > 0 && (
+                    <div className="max-w-3xl space-y-3">
+                        <h2 className="text-sm font-medium">
+                            Resultado da importação
+                        </h2>
+
+                        {import_results.map((result) => (
+                            <div
+                                key={result.filename}
+                                className={
+                                    result.success
+                                        ? 'rounded-lg border border-green-500/30 bg-green-500/10 p-4'
+                                        : 'rounded-lg border border-destructive/30 bg-destructive/10 p-4'
+                                }
+                            >
+                                <p
+                                    className={
+                                        result.success
+                                            ? 'text-sm font-medium text-green-700 dark:text-green-400'
+                                            : 'text-sm font-medium text-destructive'
+                                    }
+                                >
+                                    {result.success ? '✓ ' : '✕ '}
+                                    {result.filename}
+                                </p>
+
+                                <p
+                                    className={
+                                        result.success
+                                            ? 'mt-1 text-sm text-green-700/80 dark:text-green-400/80'
+                                            : 'mt-1 text-sm text-destructive/80'
+                                    }
+                                >
+                                    {result.message}
+                                </p>
+
+                                {result.success && (
+                                    <p className="mt-1 text-xs text-muted-foreground">
+                                        {result.positions_count}{' '}
+                                        {result.positions_count === 1
+                                            ? 'posição processada.'
+                                            : 'posições processadas.'}
+                                    </p>
+                                )}
+                            </div>
+                        ))}
                     </div>
                 )}
 
@@ -96,7 +167,7 @@ export default function Import() {
                             <Upload className="mb-3 size-8 text-muted-foreground" />
 
                             <span className="font-medium">
-                                Clique para selecionar um arquivo
+                                Clique para selecionar os arquivos
                             </span>
 
                             <span className="mt-1 text-sm text-muted-foreground">
@@ -104,8 +175,10 @@ export default function Import() {
                             </span>
 
                             <input
+                                ref={fileInputRef}
                                 id="report-file"
                                 type="file"
+                                multiple
                                 accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                                 className="hidden"
                                 onChange={handleFileChange}
@@ -113,20 +186,32 @@ export default function Import() {
                         </label>
                     </div>
 
-                    {selectedFile && (
+                    {selectedFiles.length > 0 && (
                         <div className="mt-4 rounded-lg bg-muted/50 p-4">
                             <p className="text-sm font-medium">
-                                Arquivo selecionado
+                                Arquivos selecionados ({selectedFiles.length})
                             </p>
 
-                            <p className="mt-1 break-all text-sm text-muted-foreground">
-                                {selectedFile.name}
-                            </p>
+                            <div className="mt-3 space-y-2">
+                                {selectedFiles.map((file) => (
+                                    <div
+                                        key={`${file.name}-${file.size}-${file.lastModified}`}
+                                        className="flex items-center justify-between gap-4 rounded-md border border-border/60 bg-background px-3 py-2"
+                                    >
+                                        <div className="min-w-0">
+                                            <p className="break-all text-sm">
+                                                {file.name}
+                                            </p>
 
-                            <p className="mt-1 text-xs text-muted-foreground">
-                                {(selectedFile.size / 1024 / 1024).toFixed(2)}{' '}
-                                MB
-                            </p>
+                                            <p className="mt-1 text-xs text-muted-foreground">
+                                                {(file.size / 1024 / 1024).toFixed(2)} MB
+                                            </p>
+                                        </div>
+
+                                        <FileSpreadsheet className="size-4 shrink-0 text-muted-foreground" />
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     )}
 
@@ -136,21 +221,21 @@ export default function Import() {
                         </p>
                     )}
 
-                    {errors.file && (
+                    {errors.files && (
                         <p className="mt-4 text-sm text-destructive">
-                            {errors.file}
+                            {errors.files}
                         </p>
                     )}
 
                     <div className="mt-6 flex justify-end">
                         <button
                             type="button"
-                            disabled={!selectedFile || processing}
+                            disabled={selectedFiles.length === 0 || processing}
                             onClick={handleSubmit}
                             className="cursor-pointer inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                             <Upload className="size-4" />
-                            {processing ? 'Enviando...' : 'Importar relatório'}
+                            {processing ? 'Importando...' : 'Importar relatórios'}
                         </button>
                     </div>
                 </div>
