@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -20,11 +19,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 ])]
 class InvestmentPosition extends Model
 {
-    /** @use HasFactory */
-    use HasFactory;
-
     /**
      * Get the import that owns the investment position.
+     *
+     * @return BelongsTo<InvestmentImport, InvestmentPosition>
      */
     public function investmentImport(): BelongsTo
     {

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -16,11 +15,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 ])]
 class InvestmentImport extends Model
 {
-    /** @use HasFactory */
-    use HasFactory;
-
     /**
      * Get the user that owns the import.
+     *
+     * @return BelongsTo<User, InvestmentImport>
      */
     public function user(): BelongsTo
     {
@@ -29,6 +27,8 @@ class InvestmentImport extends Model
 
     /**
      * Get the investment positions for the import.
+     *
+     * @return HasMany<InvestmentPosition, InvestmentImport>
      */
     public function positions(): HasMany
     {
