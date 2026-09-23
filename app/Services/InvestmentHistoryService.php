@@ -74,7 +74,21 @@ class InvestmentHistoryService
                     ];
                 }
 
-                $previousValue = (float) $history[$index - 1]['value'];
+                // ------------------------------------------------------
+                // $previousValue = (float) $history[$index - 1]['value'];
+                $previousItem = $history[$index - 1] ?? null;
+
+                if ($previousItem === null) {
+                    return [
+                        ...$item,
+                        'difference' => null,
+                        'percentage_change' => null,
+                    ];
+                }
+
+                $previousValue = (float) $previousItem['value'];
+                // ------------------------------------------------------
+
                 $difference = $currentValue - $previousValue;
 
                 $percentageChange = $previousValue != 0
@@ -110,15 +124,29 @@ class InvestmentHistoryService
             ? (float) $history[count($history) - 1]['value']
             : null;
 
-        $totalDifference = $firstValue !== null && $latestValue !== null
-            ? $latestValue - $firstValue
-            : null;
+        // ------------------------------------------------------
+        // $totalDifference = $firstValue !== null && $latestValue !== null
+        //     ? $latestValue - $firstValue
+        //     : null;
 
-        $totalPercentageChange = $firstValue !== null
-            && $firstValue != 0
-            && $totalDifference !== null
-            ? ($totalDifference / $firstValue) * 100
-            : null;
+        // $totalPercentageChange = $firstValue !== null
+        //     && $firstValue != 0
+        //     && $totalDifference !== null
+        //     ? ($totalDifference / $firstValue) * 100
+        //     : null;
+
+        $totalDifference = null;
+        $totalPercentageChange = null;
+
+        if ($firstValue !== null && $latestValue !== null) {
+            $totalDifference = $latestValue - $firstValue;
+
+            if ($firstValue != 0) {
+                $totalPercentageChange = ($totalDifference / $firstValue) * 100;
+            }
+        }
+
+        // ------------------------------------------------------
 
         return [
             'history' => $history,

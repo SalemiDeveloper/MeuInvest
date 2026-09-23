@@ -253,10 +253,12 @@ class InvestmentImportController extends Controller
             ],
         ]);
 
+        /** @var InvestmentImport $previousImport */
         $previousImport = InvestmentImport::query()
             ->where('user_id', Auth::id())
             ->findOrFail($validated['previous_import_id']);
 
+        /** @var InvestmentImport $currentImport */
         $currentImport = InvestmentImport::query()
             ->where('user_id', Auth::id())
             ->findOrFail($validated['current_import_id']);
