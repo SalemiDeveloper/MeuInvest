@@ -4,6 +4,7 @@ namespace App\Services;
 
 use InvalidArgumentException;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use RuntimeException;
 
@@ -23,7 +24,7 @@ class InvestmentReportImporter
     {
         $pattern = '/^relatorio-consolidado-mensal-(\d{4})-([a-zç]+)(?:\(\d+\))?\.xlsx$/iu';
 
-        if (!preg_match($pattern, $filename, $matches)) {
+        if (! preg_match($pattern, $filename, $matches)) {
             throw new InvalidArgumentException(
                 'O nome do arquivo não corresponde ao formato esperado.'
             );
@@ -47,7 +48,7 @@ class InvestmentReportImporter
             'dezembro' => 12,
         ];
 
-        if (!array_key_exists($monthName, $months)) {
+        if (! array_key_exists($monthName, $months)) {
             throw new InvalidArgumentException(
                 'O mês informado no nome do arquivo não é válido.'
             );
@@ -68,7 +69,7 @@ class InvestmentReportImporter
 
         $worksheet = $spreadsheet->getSheetByName('Posição - Renda Fixa');
 
-        if (!$worksheet) {
+        if (! $worksheet) {
             throw new RuntimeException(
                 'A aba "Posição - Renda Fixa" não foi encontrada no relatório.'
             );
@@ -77,7 +78,7 @@ class InvestmentReportImporter
         return $worksheet;
     }
 
-        /**
+    /**
      * Lê as posições de renda fixa da planilha.
      *
      * @return array<int, array<string, mixed>>
@@ -98,7 +99,7 @@ class InvestmentReportImporter
         ];
 
         foreach ($requiredHeaders as $header) {
-            if (!array_key_exists($header, $headers)) {
+            if (! array_key_exists($header, $headers)) {
                 throw new RuntimeException(
                     sprintf(
                         'A coluna obrigatória "%s" não foi encontrada no relatório.',
@@ -196,7 +197,7 @@ class InvestmentReportImporter
         foreach ($worksheet->getColumnIterator() as $column) {
             $columnLetter = $column->getColumnIndex();
             $value = $worksheet
-                ->getCell($columnLetter . '1')
+                ->getCell($columnLetter.'1')
                 ->getValue();
 
             if ($this->isEmptyValue($value)) {
@@ -217,7 +218,7 @@ class InvestmentReportImporter
         int $rowIndex
     ): mixed {
         return $worksheet
-            ->getCell($column . $rowIndex)
+            ->getCell($column.$rowIndex)
             ->getCalculatedValue();
     }
 
@@ -253,7 +254,7 @@ class InvestmentReportImporter
         }
 
         if (is_numeric($value)) {
-            $date = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject(
+            $date = Date::excelToDateTimeObject(
                 (float) $value
             );
 
@@ -308,7 +309,7 @@ class InvestmentReportImporter
             $value = str_replace(',', '.', $value);
         }
 
-        if (!is_numeric($value)) {
+        if (! is_numeric($value)) {
             throw new RuntimeException(
                 sprintf(
                     'Não foi possível interpretar o valor monetário "%s".',

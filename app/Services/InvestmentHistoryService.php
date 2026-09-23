@@ -41,7 +41,7 @@ class InvestmentHistoryService
                     ),
                 );
 
-            if (!$position) {
+            if (! $position) {
                 continue;
             }
 

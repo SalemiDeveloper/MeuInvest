@@ -64,7 +64,7 @@ class InvestmentReportComparisonService
          * mas não aparecem no relatório atual.
          */
         foreach ($previousByCode as $code => $previousPosition) {
-            if (!$currentByCode->has($code)) {
+            if (! $currentByCode->has($code)) {
                 $missingPositions[] = $this->formatUnmatchedPosition(
                     $previousPosition,
                     'missing'
@@ -183,7 +183,7 @@ class InvestmentReportComparisonService
             ->addMonth();
 
         if (
-            !$expectedCurrentPeriod->isSameMonth(
+            ! $expectedCurrentPeriod->isSameMonth(
                 $currentImport->reference_period
             )
         ) {
@@ -199,7 +199,7 @@ class InvestmentReportComparisonService
      * Códigos vazios são ignorados nesta primeira versão,
      * conforme a regra definida para o MVP.
      *
-     * @param Collection<int, InvestmentPosition> $positions
+     * @param  Collection<int, InvestmentPosition>  $positions
      * @return Collection<string, InvestmentPosition>
      */
     private function indexByCode(Collection $positions): Collection
@@ -280,7 +280,7 @@ class InvestmentReportComparisonService
     /**
      * Soma os valores CURVA das posições.
      *
-     * @param Collection<int, InvestmentPosition> $positions
+     * @param  Collection<int, InvestmentPosition>  $positions
      */
     private function sumValues(Collection $positions): float
     {
