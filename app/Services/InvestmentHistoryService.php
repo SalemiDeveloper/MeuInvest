@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\InvestmentImport;
 use App\Models\InvestmentPosition;
+use Carbon\CarbonInterface;
 use Illuminate\Support\Collection;
 
 class InvestmentHistoryService
@@ -172,7 +173,7 @@ class InvestmentHistoryService
         return mb_strtolower(trim($value ?? ''));
     }
 
-    private function formatDate($date): ?string
+    private function formatDate(?CarbonInterface $date): ?string
     {
         return $date?->format('Y-m-d');
     }
