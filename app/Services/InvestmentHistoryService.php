@@ -116,10 +116,12 @@ class InvestmentHistoryService
             ->values()
             ->all();
 
+        /** @var float|null $firstValue */
         $firstValue = count($history) > 0
             ? (float) $history[0]['value']
             : null;
 
+        /** @var float|null $latestValue */
         $latestValue = count($history) > 0
             ? (float) $history[count($history) - 1]['value']
             : null;
