@@ -159,9 +159,12 @@ class InvestmentHistoryService
             'total_difference' => $totalDifference !== null
                 ? number_format($totalDifference, 2, '.', '')
                 : null,
-            'total_percentage_change' => $totalPercentageChange !== null
-                ? number_format($totalPercentageChange, 2, '.', '')
-                : null,
+            // 'total_percentage_change' => $totalPercentageChange !== null
+            //     ? number_format($totalPercentageChange, 2, '.', '')
+            //     : null,
+            'total_percentage_change' => is_float($totalPercentageChange)
+            ? number_format($totalPercentageChange, 2, '.', '')
+            : null,
         ];
     }
 
