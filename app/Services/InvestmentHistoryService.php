@@ -142,7 +142,12 @@ class InvestmentHistoryService
             $totalDifference = $latestValue - $firstValue;
 
             if ($firstValue != 0) {
-                $totalPercentageChange = ($totalDifference / $firstValue) * 100;
+                $totalPercentageChange = number_format(
+                    ($totalDifference / $firstValue) * 100,
+                    2,
+                    '.',
+                    '',
+                );
             }
         }
 
@@ -162,9 +167,7 @@ class InvestmentHistoryService
             // 'total_percentage_change' => $totalPercentageChange !== null
             //     ? number_format($totalPercentageChange, 2, '.', '')
             //     : null,
-            'total_percentage_change' => is_float($totalPercentageChange)
-            ? number_format($totalPercentageChange, 2, '.', '')
-            : null,
+            'total_percentage_change' => $totalPercentageChange,
         ];
     }
 
