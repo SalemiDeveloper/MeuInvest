@@ -1,9 +1,16 @@
 import { Head } from '@inertiajs/react';
 import {
     Download,
+    Files,
     FileSpreadsheet,
+    FileText,
+    Landmark,
     LineChart,
     Upload,
+    Globe,
+    UserRound,
+    LogIn,
+    FileUp,
 } from 'lucide-react';
 
 const steps = [
@@ -12,35 +19,45 @@ const steps = [
         title: 'Acesse o site da B3',
         description:
             'O primeiro passo é entrar no site da B3 e procurar a Área do Investidor.',
-        icon: Download,
+        icon: Globe,
+        image: '/images/instructions/01.png',
+        imageAlt: 'Tela inicial da B3.',
     },
     {
         number: '02',
         title: 'Acesse a Área do Investidor',
         description:
             'Segundo passo é acessar a tela para fazer Login na Área do Investidor.',
-        icon: Download,
+        icon: UserRound,
+        image: '/images/instructions/02.png',
+        imageAlt: 'Acessando Área do Investidor na B3.',
     },
     {
         number: '03',
         title: 'Preencha seus dados.',
         description:
             'Se for primeiro acesso, clique em "Primeiro acesso" e siga as etapas. Caso não seja, prossiga com o Login.',
-        icon: Download,
+        icon: LogIn,
+        image: '/images/instructions/03.png',
+        imageAlt: 'Entrando na conta da B3.',
     },
     {
         number: '04',
         title: 'Acessando "Relatórios".',
         description:
             'No menu lateral (PC) ou no Menu (mobile) escolha a opção "Relatórios".',
-        icon: Download,
+        icon: FileText,
+        image: '/images/instructions/04.png',
+        imageAlt: 'Acessando a parte de relatórios no site da B3.',
     },
     {
         number: '05',
         title: 'Exportando corretamente.',
         description:
             'Para exportar o relatório de forma correta, selecione "Mensal" e "Arquivo em Excel".',
-        icon: Download,
+        icon: FileSpreadsheet,
+        image: '/images/instructions/05.png',
+        imageAlt: 'Selecionando a forma correta para exportar os relatórios para que a aplicação MeuInvest consiga trabalhar em cima dos relatórios.',
     },
     {
         number: '06',
@@ -48,34 +65,44 @@ const steps = [
         description:
             'Selecione o mês e ano desejado e clique em "Baixar relatório". É recomendado, para uma boa experiência, exportar os últimos 6 meses.',
         icon: Download,
+        image: '/images/instructions/06.png',
+        imageAlt: 'Exportando os relatórios no site da B3.',
     },
     {
         number: '07',
         title: 'Acesse o MeuInvest.',
         description:
             'Entre na sua conta no MeuInvest.',
-        icon: Download,
+        icon: Landmark,
+        image: '/images/instructions/07.png',
+        imageAlt: 'Entrando na conta no MeuInvest.',
     },
     {
         number: '08',
         title: 'Acesse a página de importação.',
         description:
             'Selecione a opção "Importar relatórios.',
-        icon: Download,
+        icon: Upload,
+        image: '/images/instructions/08.png',
+        imageAlt: 'Selecionando a opção de importar relatórios.',
     },
     {
         number: '09',
         title: 'Selecione os arquivos.',
         description:
             'Selecione os arquivos que deseja importar. Podendo ser mais de um por vez.',
-        icon: Download,
+        icon: Files,
+        image: '/images/instructions/09.png',
+        imageAlt: 'Selecionando os arquivos que exportamos da B3.',
     },
     {
         number: '10',
         title: 'Importe os arquivos.',
         description:
             'Clique em "Importar relatório", espere concluir e após esta etapa pode visualizar as análises dos mesmos.',
-        icon: Download,
+        icon: FileUp,
+        image: '/images/instructions/10.png',
+        imageAlt: 'Importando os relatórios que baixamos no site da B3.',
     },
     {
         number: '11',
@@ -83,6 +110,8 @@ const steps = [
         description:
             'Após a importação, os dados ficam disponíveis para consulta e passam a fazer parte do seu histórico de investimentos.',
         icon: LineChart,
+        image: '/images/instructions/11.png',
+        imageAlt: 'Opções para visualizar após a importação dos relatórios da B3.',
     },
 ];
 
@@ -183,7 +212,12 @@ export default function Instructions() {
                                                     {/* Área reservada para screenshot */}
                                                     <div className="mt-6 flex aspect-video items-center justify-center rounded-xl border border-dashed border-border bg-muted/20">
                                                         <span className="text-sm text-muted-foreground">
-                                                            Screenshot do passo
+                                                            {/* Screenshot do passo */}
+                                                            <img
+                                                                src={step.image}
+                                                                alt={step.imageAlt}
+                                                                className="w-full"
+                                                            />
                                                         </span>
                                                     </div>
                                                 </div>
