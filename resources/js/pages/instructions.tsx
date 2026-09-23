@@ -57,7 +57,8 @@ const steps = [
             'Para exportar o relatório de forma correta, selecione "Mensal" e "Arquivo em Excel".',
         icon: FileSpreadsheet,
         image: '/images/instructions/05.png',
-        imageAlt: 'Selecionando a forma correta para exportar os relatórios para que a aplicação MeuInvest consiga trabalhar em cima dos relatórios.',
+        imageAlt:
+            'Selecionando a forma correta para exportar os relatórios para que a aplicação MeuInvest consiga trabalhar em cima dos relatórios.',
     },
     {
         number: '06',
@@ -71,8 +72,7 @@ const steps = [
     {
         number: '07',
         title: 'Acesse o MeuInvest.',
-        description:
-            'Entre na sua conta no MeuInvest.',
+        description: 'Entre na sua conta no MeuInvest.',
         icon: Landmark,
         image: '/images/instructions/07.png',
         imageAlt: 'Entrando na conta no MeuInvest.',
@@ -80,8 +80,7 @@ const steps = [
     {
         number: '08',
         title: 'Acesse a página de importação.',
-        description:
-            'Selecione a opção "Importar relatórios.',
+        description: 'Selecione a opção "Importar relatórios.',
         icon: Upload,
         image: '/images/instructions/08.png',
         imageAlt: 'Selecionando a opção de importar relatórios.',
@@ -111,7 +110,8 @@ const steps = [
             'Após a importação, os dados ficam disponíveis para consulta e passam a fazer parte do seu histórico de investimentos.',
         icon: LineChart,
         image: '/images/instructions/11.png',
-        imageAlt: 'Opções para visualizar após a importação dos relatórios da B3.',
+        imageAlt:
+            'Opções para visualizar após a importação dos relatórios da B3.',
     },
 ];
 
@@ -120,11 +120,11 @@ export default function Instructions() {
         <>
             <Head title="Como funciona" />
 
-            <div className="min-h-screen bg-background text-foreground">
+            <div className="bg-background text-foreground min-h-screen">
                 <div className="mx-auto w-full max-w-6xl px-6 py-10 lg:px-8 lg:py-14">
                     {/* Cabeçalho */}
                     <div className="max-w-2xl">
-                        <p className="text-sm font-medium text-muted-foreground">
+                        <p className="text-muted-foreground text-sm font-medium">
                             Guia do MeuInvest
                         </p>
 
@@ -132,10 +132,10 @@ export default function Instructions() {
                             Como funciona
                         </h1>
 
-                        <p className="mt-4 text-base leading-7 text-muted-foreground">
-                            Aprenda passo a passo como baixar seus relatórios
-                            da B3 e importá-los no MeuInvest para acompanhar
-                            seus investimentos.
+                        <p className="text-muted-foreground mt-4 text-base leading-7">
+                            Aprenda passo a passo como baixar seus relatórios da
+                            B3 e importá-los no MeuInvest para acompanhar seus
+                            investimentos.
                         </p>
                     </div>
 
@@ -153,7 +153,7 @@ export default function Instructions() {
                                         <a
                                             key={step.number}
                                             href={`#step-${step.number}`}
-                                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                                            className="text-muted-foreground hover:bg-muted hover:text-foreground flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors"
                                         >
                                             <span className="font-mono text-xs">
                                                 {step.number}
@@ -181,22 +181,21 @@ export default function Instructions() {
                                             <div className="flex gap-5">
                                                 {/* Número / ícone */}
                                                 <div className="flex shrink-0 flex-col items-center">
-                                                    <div className="flex size-10 items-center justify-center rounded-lg border border-border bg-muted/40">
+                                                    <div className="border-border bg-muted/40 flex size-10 items-center justify-center rounded-lg border">
                                                         <Icon className="size-5" />
                                                     </div>
 
                                                     {step.number !==
-                                                        steps[
-                                                            steps.length - 1
-                                                        ].number && (
-                                                        <div className="mt-3 h-full w-px bg-border" />
+                                                        steps[steps.length - 1]
+                                                            .number && (
+                                                        <div className="bg-border mt-3 h-full w-px" />
                                                     )}
                                                 </div>
 
                                                 {/* Conteúdo */}
                                                 <div className="min-w-0 flex-1 pb-2">
                                                     <div className="flex items-center gap-3">
-                                                        <span className="font-mono text-xs text-muted-foreground">
+                                                        <span className="text-muted-foreground font-mono text-xs">
                                                             {step.number}
                                                         </span>
 
@@ -205,17 +204,19 @@ export default function Instructions() {
                                                         </h2>
                                                     </div>
 
-                                                    <p className="mt-3 text-sm leading-7 text-muted-foreground">
+                                                    <p className="text-muted-foreground mt-3 text-sm leading-7">
                                                         {step.description}
                                                     </p>
 
                                                     {/* Área reservada para screenshot */}
-                                                    <div className="mt-6 flex aspect-video items-center justify-center rounded-xl border border-dashed border-border bg-muted/20">
-                                                        <span className="text-sm text-muted-foreground">
+                                                    <div className="border-border bg-muted/20 mt-6 flex aspect-video items-center justify-center rounded-xl border border-dashed">
+                                                        <span className="text-muted-foreground text-sm">
                                                             {/* Screenshot do passo */}
                                                             <img
                                                                 src={step.image}
-                                                                alt={step.imageAlt}
+                                                                alt={
+                                                                    step.imageAlt
+                                                                }
                                                                 className="w-full"
                                                             />
                                                         </span>

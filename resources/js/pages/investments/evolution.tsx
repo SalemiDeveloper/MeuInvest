@@ -9,8 +9,6 @@ import {
     YAxis,
 } from 'recharts';
 
-import AppLayout from '@/layouts/app-layout';
-
 type HistoryItem = {
     id: number;
     reference_period: string;
@@ -42,10 +40,7 @@ type CustomTooltipProps = {
     label?: string;
 };
 
-function CustomTooltip({
-    active,
-    payload,
-}: CustomTooltipProps) {
+function CustomTooltip({ active, payload }: CustomTooltipProps) {
     if (!active || !payload || payload.length === 0) {
         return null;
     }
@@ -55,14 +50,12 @@ function CustomTooltip({
     const chartItem = item.payload;
 
     return (
-        <div className="rounded-lg border bg-background px-4 py-3 shadow-md">
-            <p className="text-sm font-medium">
-                {chartItem?.period_label}
-            </p>
+        <div className="bg-background rounded-lg border px-4 py-3 shadow-md">
+            <p className="text-sm font-medium">{chartItem?.period_label}</p>
 
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="text-muted-foreground mt-1 text-sm">
                 Valor total:{' '}
-                <span className="font-semibold text-foreground">
+                <span className="text-foreground font-semibold">
                     {formatCurrency(value)}
                 </span>
             </p>
@@ -150,9 +143,10 @@ export default function Evolution({ history }: Props) {
         const previousItem = chartData[index - 1];
         const difference = item.total_value - previousItem.total_value;
 
-        const percentageChange = previousItem.total_value > 0
-            ? difference / previousItem.total_value
-            : null;
+        const percentageChange =
+            previousItem.total_value > 0
+                ? difference / previousItem.total_value
+                : null;
 
         return {
             ...item,
@@ -166,13 +160,13 @@ export default function Evolution({ history }: Props) {
 
     const absoluteGrowth = latestValue - firstValue;
 
-    const percentageGrowth = firstValue > 0
-        ? absoluteGrowth / firstValue
-        : null;
+    const percentageGrowth =
+        firstValue > 0 ? absoluteGrowth / firstValue : null;
 
-    const highestValue = chartData.length > 0
-        ? Math.max(...chartData.map((item) => item.total_value))
-        : 0;
+    const highestValue =
+        chartData.length > 0
+            ? Math.max(...chartData.map((item) => item.total_value))
+            : 0;
 
     return (
         <>
@@ -183,9 +177,9 @@ export default function Evolution({ history }: Props) {
                         Evolução da carteira
                     </h1>
 
-                    <p className="mt-1 text-sm text-muted-foreground">
-                        Acompanhe a evolução do valor total registrado nos
-                        seus relatórios mensais.
+                    <p className="text-muted-foreground mt-1 text-sm">
+                        Acompanhe a evolução do valor total registrado nos seus
+                        relatórios mensais.
                     </p>
                 </div>
 
@@ -195,16 +189,16 @@ export default function Evolution({ history }: Props) {
                             Nenhum dado disponível
                         </h2>
 
-                        <p className="mt-2 text-sm text-muted-foreground">
-                            Importe pelo menos um relatório para visualizar
-                            a evolução da sua carteira.
+                        <p className="text-muted-foreground mt-2 text-sm">
+                            Importe pelo menos um relatório para visualizar a
+                            evolução da sua carteira.
                         </p>
                     </div>
                 ) : (
                     <>
                         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                             <div className="rounded-xl border p-5">
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-muted-foreground text-sm">
                                     Patrimônio atual
                                 </p>
 
@@ -212,7 +206,7 @@ export default function Evolution({ history }: Props) {
                                     {formatCurrency(latestValue)}
                                 </p>
 
-                                <p className="mt-1 text-xs text-muted-foreground">
+                                <p className="text-muted-foreground mt-1 text-xs">
                                     {formatReferencePeriod(
                                         chartData[chartData.length - 1]
                                             .reference_period,
@@ -221,7 +215,7 @@ export default function Evolution({ history }: Props) {
                             </div>
 
                             <div className="rounded-xl border p-5">
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-muted-foreground text-sm">
                                     Primeiro registro
                                 </p>
 
@@ -229,7 +223,7 @@ export default function Evolution({ history }: Props) {
                                     {formatCurrency(firstValue)}
                                 </p>
 
-                                <p className="mt-1 text-xs text-muted-foreground">
+                                <p className="text-muted-foreground mt-1 text-xs">
                                     {formatReferencePeriod(
                                         chartData[0].reference_period,
                                     )}
@@ -237,7 +231,7 @@ export default function Evolution({ history }: Props) {
                             </div>
 
                             <div className="rounded-xl border p-5">
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-muted-foreground text-sm">
                                     Crescimento no período
                                 </p>
 
@@ -245,14 +239,14 @@ export default function Evolution({ history }: Props) {
                                     {formatDifference(absoluteGrowth)}
                                 </p>
 
-                                <p className="mt-1 text-xs text-muted-foreground">
+                                <p className="text-muted-foreground mt-1 text-xs">
                                     Diferença entre o primeiro e o último
                                     registro
                                 </p>
                             </div>
 
                             <div className="rounded-xl border p-5">
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-muted-foreground text-sm">
                                     Maior patrimônio registrado
                                 </p>
 
@@ -260,7 +254,7 @@ export default function Evolution({ history }: Props) {
                                     {formatCurrency(highestValue)}
                                 </p>
 
-                                <p className="mt-1 text-xs text-muted-foreground">
+                                <p className="text-muted-foreground mt-1 text-xs">
                                     Variação acumulada:{' '}
                                     {formatPercentage(percentageGrowth)}
                                 </p>
@@ -273,17 +267,14 @@ export default function Evolution({ history }: Props) {
                                     Histórico do patrimônio
                                 </h2>
 
-                                <p className="mt-1 text-sm text-muted-foreground">
+                                <p className="text-muted-foreground mt-1 text-sm">
                                     Valor total CURVA registrado em cada
                                     relatório importado.
                                 </p>
                             </div>
 
                             <div className="h-[320px] w-full">
-                                <ResponsiveContainer
-                                    width="100%"
-                                    height="100%"
-                                >
+                                <ResponsiveContainer width="100%" height="100%">
                                     <LineChart
                                         data={chartData}
                                         margin={{
@@ -310,9 +301,7 @@ export default function Evolution({ history }: Props) {
                                             width={90}
                                         />
 
-                                        <Tooltip
-                                            content={<CustomTooltip />}
-                                        />
+                                        <Tooltip content={<CustomTooltip />} />
 
                                         <Line
                                             type="monotone"
@@ -334,17 +323,16 @@ export default function Evolution({ history }: Props) {
                                     Histórico detalhado
                                 </h2>
 
-                                <p className="mt-1 text-sm text-muted-foreground">
+                                <p className="text-muted-foreground mt-1 text-sm">
                                     Consulte os valores registrados e sua
-                                    diferença em relação ao relatório
-                                    anterior.
+                                    diferença em relação ao relatório anterior.
                                 </p>
                             </div>
 
                             <div className="overflow-hidden rounded-xl border">
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-sm">
-                                        <thead className="border-b bg-muted/50">
+                                        <thead className="bg-muted/50 border-b">
                                             <tr>
                                                 <th className="px-4 py-3 text-left font-medium">
                                                     Período
@@ -383,8 +371,7 @@ export default function Evolution({ history }: Props) {
                                                         className={`px-4 py-3 text-right ${
                                                             item.difference !==
                                                                 null &&
-                                                            item.difference <
-                                                                0
+                                                            item.difference < 0
                                                                 ? 'text-destructive'
                                                                 : ''
                                                         }`}
@@ -416,12 +403,12 @@ export default function Evolution({ history }: Props) {
                             </div>
                         </section>
 
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-muted-foreground text-xs">
                             * Os valores apresentados representam o patrimônio
-                            registrado nos relatórios importados. As
-                            variações podem ser influenciadas por novas
-                            aplicações, resgates, vencimentos e alterações
-                            no valor dos investimentos.
+                            registrado nos relatórios importados. As variações
+                            podem ser influenciadas por novas aplicações,
+                            resgates, vencimentos e alterações no valor dos
+                            investimentos.
                         </p>
                     </>
                 )}

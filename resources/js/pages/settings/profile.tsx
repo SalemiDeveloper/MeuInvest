@@ -89,20 +89,23 @@ export default function Profile({
                                 auth.user.email_verified_at === null && (
                                     <div>
                                         <p className="text-muted-foreground -mt-4 text-sm">
-                                            Seu endereço de email não é verificado.{' '}
+                                            Seu endereço de email não é
+                                            verificado.{' '}
                                             <Link
                                                 href={send()}
                                                 as="button"
                                                 className="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
                                             >
-                                                Clique aqui para reenviar a verificação de email.
+                                                Clique aqui para reenviar a
+                                                verificação de email.
                                             </Link>
                                         </p>
 
                                         {status ===
                                             'verification-link-sent' && (
                                             <div className="mt-2 text-sm font-medium text-green-600">
-                                                Uma nova verificação foi enviada para seu endereço de email.
+                                                Uma nova verificação foi enviada
+                                                para seu endereço de email.
                                             </div>
                                         )}
                                     </div>

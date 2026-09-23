@@ -92,7 +92,7 @@ export default function Register({ passwordRules }: Props) {
 
                             <Button
                                 type="submit"
-                                className="cursor-pointer mt-2 w-full"
+                                className="mt-2 w-full cursor-pointer"
                                 tabIndex={5}
                                 data-test="register-user-button"
                             >

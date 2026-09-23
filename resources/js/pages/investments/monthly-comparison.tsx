@@ -46,10 +46,6 @@ type Comparison = {
     missing_positions: UnmatchedPosition[];
 };
 
-type Errors = {
-    comparison?: string;
-};
-
 type Props = {
     imports: InvestmentImport[];
     comparison?: Comparison;
@@ -74,8 +70,7 @@ function formatReferencePeriod(period: string): string {
 }
 
 function formatCurrency(value: string | number): string {
-    const numericValue =
-        typeof value === 'number' ? value : Number(value);
+    const numericValue = typeof value === 'number' ? value : Number(value);
 
     return new Intl.NumberFormat('pt-BR', {
         style: 'currency',
@@ -131,23 +126,30 @@ export default function MonthlyComparison({
     selected,
     errors,
 }: Props) {
-
-    const [previousImportId, setPreviousImportId] = useState(selected?.previous_import_id?.toString() ?? '',);
-    const [currentImportId, setCurrentImportId] = useState(selected?.current_import_id?.toString() ?? '',);
-    const [showComparison, setShowComparison] = useState(Boolean(comparison),);
+    const [previousImportId, setPreviousImportId] = useState(
+        selected?.previous_import_id?.toString() ?? '',
+    );
+    const [currentImportId, setCurrentImportId] = useState(
+        selected?.current_import_id?.toString() ?? '',
+    );
+    const [showComparison, setShowComparison] = useState(Boolean(comparison));
 
     function isPreviousOption(investmentImport: InvestmentImport): boolean {
         if (!currentImportId) {
             return true;
         }
 
-        const currentImport = imports.find((item) => item.id.toString() === currentImportId,);
+        const currentImport = imports.find(
+            (item) => item.id.toString() === currentImportId,
+        );
 
         if (!currentImport) {
             return true;
         }
 
-        return investmentImport.reference_period < currentImport.reference_period;
+        return (
+            investmentImport.reference_period < currentImport.reference_period
+        );
     }
 
     function isCurrentOption(investmentImport: InvestmentImport): boolean {
@@ -155,13 +157,17 @@ export default function MonthlyComparison({
             return true;
         }
 
-        const previousImport = imports.find((item) => item.id.toString() === previousImportId,);
+        const previousImport = imports.find(
+            (item) => item.id.toString() === previousImportId,
+        );
 
         if (!previousImport) {
             return true;
         }
 
-        return investmentImport.reference_period > previousImport.reference_period;
+        return (
+            investmentImport.reference_period > previousImport.reference_period
+        );
     }
 
     function handleCompare() {
@@ -194,17 +200,15 @@ export default function MonthlyComparison({
 
             <div className="space-y-8 p-6">
                 <div>
-                    <h1 className="text-2xl font-semibold">
-                        Análise mensal
-                    </h1>
+                    <h1 className="text-2xl font-semibold">Análise mensal</h1>
 
-                    <p className="mt-2 text-sm text-muted-foreground">
+                    <p className="text-muted-foreground mt-2 text-sm">
                         Compare a evolução dos seus investimentos entre dois
                         relatórios mensais <strong>**consecutivos**</strong>.
                     </p>
                 </div>
 
-                <section className="rounded-xl border bg-card p-6 shadow-sm">
+                <section className="bg-card rounded-xl border p-6 shadow-sm">
                     <div className="grid gap-4 md:grid-cols-2">
                         <div className="space-y-2">
                             <label
@@ -220,7 +224,7 @@ export default function MonthlyComparison({
                                 onChange={(event) =>
                                     setPreviousImportId(event.target.value)
                                 }
-                                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                                className="bg-background w-full rounded-md border px-3 py-2 text-sm"
                             >
                                 <option value="">
                                     Selecione o relatório anterior
@@ -236,7 +240,8 @@ export default function MonthlyComparison({
                                             {formatReferencePeriod(
                                                 investmentImport.reference_period,
                                             )}{' '}
-                                            — {investmentImport.positions_count} posições
+                                            — {investmentImport.positions_count}{' '}
+                                            posições
                                         </option>
                                     ))}
                             </select>
@@ -256,7 +261,7 @@ export default function MonthlyComparison({
                                 onChange={(event) =>
                                     setCurrentImportId(event.target.value)
                                 }
-                                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                                className="bg-background w-full rounded-md border px-3 py-2 text-sm"
                             >
                                 <option value="">
                                     Selecione o relatório atual
@@ -272,7 +277,8 @@ export default function MonthlyComparison({
                                             {formatReferencePeriod(
                                                 investmentImport.reference_period,
                                             )}{' '}
-                                            — {investmentImport.positions_count} posições
+                                            — {investmentImport.positions_count}{' '}
+                                            posições
                                         </option>
                                     ))}
                             </select>
@@ -283,7 +289,7 @@ export default function MonthlyComparison({
                         type="button"
                         onClick={handleCompare}
                         disabled={!previousImportId || !currentImportId}
-                        className="cursor-pointer mt-5 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity disabled:cursor-not-allowed disabled:opacity-50"
+                        className="bg-primary text-primary-foreground mt-5 cursor-pointer rounded-md px-4 py-2 text-sm font-medium transition-opacity disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         Comparar relatórios
                     </button>
@@ -301,9 +307,9 @@ export default function MonthlyComparison({
                             Nenhuma comparação realizada
                         </h2>
 
-                        <p className="mt-2 text-sm text-muted-foreground">
-                            Selecione dois relatórios consecutivos para visualizar a
-                            evolução dos investimentos.
+                        <p className="text-muted-foreground mt-2 text-sm">
+                            Selecione dois relatórios consecutivos para
+                            visualizar a evolução dos investimentos.
                         </p>
                     </section>
                 )}
@@ -317,28 +323,32 @@ export default function MonthlyComparison({
                                 </h2>
 
                                 <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                                    <div className="rounded-xl border bg-card p-5">
-                                        <p className="text-sm text-muted-foreground">
+                                    <div className="bg-card rounded-xl border p-5">
+                                        <p className="text-muted-foreground text-sm">
                                             Período anterior
                                         </p>
 
                                         <p className="mt-2 text-xl font-semibold">
-                                            {formatCurrency(comparison.total_previous_value)}
+                                            {formatCurrency(
+                                                comparison.total_previous_value,
+                                            )}
                                         </p>
                                     </div>
 
-                                    <div className="rounded-xl border bg-card p-5">
-                                        <p className="text-sm text-muted-foreground">
+                                    <div className="bg-card rounded-xl border p-5">
+                                        <p className="text-muted-foreground text-sm">
                                             Período atual
                                         </p>
 
                                         <p className="mt-2 text-xl font-semibold">
-                                            {formatCurrency(comparison.total_current_value)}
+                                            {formatCurrency(
+                                                comparison.total_current_value,
+                                            )}
                                         </p>
                                     </div>
 
-                                    <div className="rounded-xl border bg-card p-5">
-                                        <p className="text-sm text-muted-foreground">
+                                    <div className="bg-card rounded-xl border p-5">
+                                        <p className="text-muted-foreground text-sm">
                                             Variação
                                         </p>
 
@@ -347,12 +357,14 @@ export default function MonthlyComparison({
                                                 comparison.total_variation,
                                             )}`}
                                         >
-                                            {formatVariation(comparison.total_variation)}
+                                            {formatVariation(
+                                                comparison.total_variation,
+                                            )}
                                         </p>
                                     </div>
 
-                                    <div className="rounded-xl border bg-card p-5">
-                                        <p className="text-sm text-muted-foreground">
+                                    <div className="bg-card rounded-xl border p-5">
+                                        <p className="text-muted-foreground text-sm">
                                             Variação percentual
                                         </p>
 
@@ -361,7 +373,9 @@ export default function MonthlyComparison({
                                                 comparison.total_variation,
                                             )}`}
                                         >
-                                            {formatPercentage(comparison.total_percentage)}
+                                            {formatPercentage(
+                                                comparison.total_percentage,
+                                            )}
                                         </p>
                                     </div>
                                 </div>
@@ -372,34 +386,40 @@ export default function MonthlyComparison({
                                     Investimentos acompanhados
                                 </h2>
 
-                                <p className="mb-4 text-sm text-muted-foreground">
-                                    Considera apenas os investimentos identificados nos dois
-                                    relatórios, desconsiderando novas posições e posições ausentes.
+                                <p className="text-muted-foreground mb-4 text-sm">
+                                    Considera apenas os investimentos
+                                    identificados nos dois relatórios,
+                                    desconsiderando novas posições e posições
+                                    ausentes.
                                 </p>
 
                                 <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                                    <div className="rounded-xl border bg-card p-5">
-                                        <p className="text-sm text-muted-foreground">
+                                    <div className="bg-card rounded-xl border p-5">
+                                        <p className="text-muted-foreground text-sm">
                                             Acompanhados no período anterior
                                         </p>
 
                                         <p className="mt-2 text-xl font-semibold">
-                                            {formatCurrency(comparison.compared_previous_value)}
+                                            {formatCurrency(
+                                                comparison.compared_previous_value,
+                                            )}
                                         </p>
                                     </div>
 
-                                    <div className="rounded-xl border bg-card p-5">
-                                        <p className="text-sm text-muted-foreground">
+                                    <div className="bg-card rounded-xl border p-5">
+                                        <p className="text-muted-foreground text-sm">
                                             Acompanhados no período atual
                                         </p>
 
                                         <p className="mt-2 text-xl font-semibold">
-                                            {formatCurrency(comparison.compared_current_value)}
+                                            {formatCurrency(
+                                                comparison.compared_current_value,
+                                            )}
                                         </p>
                                     </div>
 
-                                    <div className="rounded-xl border bg-card p-5">
-                                        <p className="text-sm text-muted-foreground">
+                                    <div className="bg-card rounded-xl border p-5">
+                                        <p className="text-muted-foreground text-sm">
                                             Variação acompanhada
                                         </p>
 
@@ -408,12 +428,14 @@ export default function MonthlyComparison({
                                                 comparison.compared_variation,
                                             )}`}
                                         >
-                                            {formatVariation(comparison.compared_variation)}
+                                            {formatVariation(
+                                                comparison.compared_variation,
+                                            )}
                                         </p>
                                     </div>
 
-                                    <div className="rounded-xl border bg-card p-5">
-                                        <p className="text-sm text-muted-foreground">
+                                    <div className="bg-card rounded-xl border p-5">
+                                        <p className="text-muted-foreground text-sm">
                                             Variação percentual acompanhada
                                         </p>
 
@@ -422,7 +444,9 @@ export default function MonthlyComparison({
                                                 comparison.compared_variation,
                                             )}`}
                                         >
-                                            {formatPercentage(comparison.compared_percentage)}
+                                            {formatPercentage(
+                                                comparison.compared_percentage,
+                                            )}
                                         </p>
                                     </div>
                                 </div>
@@ -435,7 +459,7 @@ export default function MonthlyComparison({
                                     Posições mantidas
                                 </h2>
 
-                                <p className="mt-1 text-sm text-muted-foreground">
+                                <p className="text-muted-foreground mt-1 text-sm">
                                     Investimentos identificados nos dois
                                     relatórios pelo código do produto.
                                 </p>
@@ -443,7 +467,7 @@ export default function MonthlyComparison({
 
                             <div className="overflow-x-auto rounded-xl border">
                                 <table className="w-full min-w-[900px] text-sm">
-                                    <thead className="border-b bg-muted/50">
+                                    <thead className="bg-muted/50 border-b">
                                         <tr>
                                             <th className="px-4 py-3 text-left font-medium">
                                                 Produto
@@ -527,7 +551,7 @@ export default function MonthlyComparison({
                                 </table>
 
                                 {comparison.positions.length === 0 && (
-                                    <p className="p-6 text-center text-sm text-muted-foreground">
+                                    <p className="text-muted-foreground p-6 text-center text-sm">
                                         Nenhuma posição foi mantida entre os
                                         relatórios selecionados.
                                     </p>
@@ -542,7 +566,7 @@ export default function MonthlyComparison({
                                         Novas posições
                                     </h2>
 
-                                    <p className="mt-1 text-sm text-muted-foreground">
+                                    <p className="text-muted-foreground mt-1 text-sm">
                                         Investimentos presentes apenas no
                                         relatório atual.
                                     </p>
@@ -550,7 +574,7 @@ export default function MonthlyComparison({
 
                                 <div className="overflow-x-auto rounded-xl border">
                                     <table className="w-full min-w-[600px] text-sm">
-                                        <thead className="border-b bg-muted/50">
+                                        <thead className="bg-muted/50 border-b">
                                             <tr>
                                                 <th className="px-4 py-3 text-left font-medium">
                                                     Produto
@@ -601,7 +625,7 @@ export default function MonthlyComparison({
                                     </table>
 
                                     {comparison.new_positions.length === 0 && (
-                                        <p className="p-6 text-center text-sm text-muted-foreground">
+                                        <p className="text-muted-foreground p-6 text-center text-sm">
                                             Nenhuma posição nova identificada.
                                         </p>
                                     )}
@@ -614,7 +638,7 @@ export default function MonthlyComparison({
                                         Posições ausentes
                                     </h2>
 
-                                    <p className="mt-1 text-sm text-muted-foreground">
+                                    <p className="text-muted-foreground mt-1 text-sm">
                                         Investimentos presentes no relatório
                                         anterior, mas não no atual.
                                     </p>
@@ -622,7 +646,7 @@ export default function MonthlyComparison({
 
                                 <div className="overflow-x-auto rounded-xl border">
                                     <table className="w-full min-w-[600px] text-sm">
-                                        <thead className="border-b bg-muted/50">
+                                        <thead className="bg-muted/50 border-b">
                                             <tr>
                                                 <th className="px-4 py-3 text-left font-medium">
                                                     Produto
@@ -674,7 +698,7 @@ export default function MonthlyComparison({
 
                                     {comparison.missing_positions.length ===
                                         0 && (
-                                        <p className="p-6 text-center text-sm text-muted-foreground">
+                                        <p className="text-muted-foreground p-6 text-center text-sm">
                                             Nenhuma posição ausente
                                             identificada.
                                         </p>

@@ -68,11 +68,9 @@ export default function Dashboard({ summary, latest_import }: Props) {
 
             <div className="space-y-8 p-6">
                 <div>
-                    <h1 className="text-2xl font-semibold">
-                        Dashboard
-                    </h1>
+                    <h1 className="text-2xl font-semibold">Dashboard</h1>
 
-                    <p className="mt-2 text-sm text-muted-foreground">
+                    <p className="text-muted-foreground mt-2 text-sm">
                         Acompanhe um resumo dos seus investimentos a partir do
                         último relatório importado.
                     </p>
@@ -84,14 +82,14 @@ export default function Dashboard({ summary, latest_import }: Props) {
                             Nenhum relatório importado
                         </h2>
 
-                        <p className="mt-2 text-sm text-muted-foreground">
-                            Importe seu primeiro relatório da B3 para
-                            visualizar seus investimentos aqui.
+                        <p className="text-muted-foreground mt-2 text-sm">
+                            Importe seu primeiro relatório da B3 para visualizar
+                            seus investimentos aqui.
                         </p>
 
                         <Link
                             href="/investments/import"
-                            className="mt-5 inline-flex rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+                            className="bg-primary text-primary-foreground mt-5 inline-flex rounded-md px-4 py-2 text-sm font-medium"
                         >
                             Importar relatório
                         </Link>
@@ -104,7 +102,7 @@ export default function Dashboard({ summary, latest_import }: Props) {
                                     Visão geral
                                 </h2>
 
-                                <p className="mt-1 text-sm text-muted-foreground">
+                                <p className="text-muted-foreground mt-1 text-sm">
                                     Dados referentes ao relatório de{' '}
                                     {formatReferencePeriod(
                                         summary.reference_period,
@@ -114,20 +112,18 @@ export default function Dashboard({ summary, latest_import }: Props) {
                             </div>
 
                             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                                <div className="rounded-xl border bg-card p-5">
-                                    <p className="text-sm text-muted-foreground">
+                                <div className="bg-card rounded-xl border p-5">
+                                    <p className="text-muted-foreground text-sm">
                                         Patrimônio atualizado
                                     </p>
 
                                     <p className="mt-2 text-2xl font-semibold">
-                                        {formatCurrency(
-                                            summary.total_value,
-                                        )}
+                                        {formatCurrency(summary.total_value)}
                                     </p>
                                 </div>
 
-                                <div className="rounded-xl border bg-card p-5">
-                                    <p className="text-sm text-muted-foreground">
+                                <div className="bg-card rounded-xl border p-5">
+                                    <p className="text-muted-foreground text-sm">
                                         Investimentos
                                     </p>
 
@@ -136,8 +132,8 @@ export default function Dashboard({ summary, latest_import }: Props) {
                                     </p>
                                 </div>
 
-                                <div className="rounded-xl border bg-card p-5">
-                                    <p className="text-sm text-muted-foreground">
+                                <div className="bg-card rounded-xl border p-5">
+                                    <p className="text-muted-foreground text-sm">
                                         Instituições
                                     </p>
 
@@ -146,8 +142,8 @@ export default function Dashboard({ summary, latest_import }: Props) {
                                     </p>
                                 </div>
 
-                                <div className="rounded-xl border bg-card p-5">
-                                    <p className="text-sm text-muted-foreground">
+                                <div className="bg-card rounded-xl border p-5">
+                                    <p className="text-muted-foreground text-sm">
                                         Último relatório
                                     </p>
 
@@ -160,15 +156,14 @@ export default function Dashboard({ summary, latest_import }: Props) {
                             </div>
                         </section>
 
-                        <section className="rounded-xl border bg-card p-6">
+                        <section className="bg-card rounded-xl border p-6">
                             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                                 <div>
                                     <h2 className="font-semibold">
-                                        Continue acompanhando seus
-                                        investimentos
+                                        Continue acompanhando seus investimentos
                                     </h2>
 
-                                    <p className="mt-1 text-sm text-muted-foreground">
+                                    <p className="text-muted-foreground mt-1 text-sm">
                                         Importe um novo relatório mensal ou
                                         compare períodos anteriores.
                                     </p>
@@ -177,7 +172,7 @@ export default function Dashboard({ summary, latest_import }: Props) {
                                 <div className="flex flex-wrap gap-3">
                                     <Link
                                         href="/investments/import"
-                                        className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+                                        className="bg-primary text-primary-foreground rounded-md px-4 py-2 text-sm font-medium"
                                     >
                                         Importar relatório
                                     </Link>
@@ -199,26 +194,29 @@ export default function Dashboard({ summary, latest_import }: Props) {
                                 </h2>
 
                                 {latest_import && (
-                                    <p className="text-sm text-muted-foreground">
+                                    <p className="text-muted-foreground text-sm">
                                         Relatório de{' '}
-                                        {formatReferencePeriod(latest_import.reference_period)}
+                                        {formatReferencePeriod(
+                                            latest_import.reference_period,
+                                        )}
                                     </p>
                                 )}
                             </div>
 
                             {!latest_import ? (
-                                <div className="rounded-xl border p-6 text-sm text-muted-foreground">
+                                <div className="text-muted-foreground rounded-xl border p-6 text-sm">
                                     Nenhum relatório foi importado ainda.
                                 </div>
                             ) : latest_import.positions.length === 0 ? (
-                                <div className="rounded-xl border p-6 text-sm text-muted-foreground">
-                                    O último relatório não possui investimentos registrados.
+                                <div className="text-muted-foreground rounded-xl border p-6 text-sm">
+                                    O último relatório não possui investimentos
+                                    registrados.
                                 </div>
                             ) : (
                                 <div className="overflow-hidden rounded-xl border">
                                     <div className="overflow-x-auto">
                                         <table className="w-full text-sm">
-                                            <thead className="border-b bg-muted/50">
+                                            <thead className="bg-muted/50 border-b">
                                                 <tr>
                                                     <th className="px-4 py-3 text-left font-medium">
                                                         Investimento
@@ -236,33 +234,45 @@ export default function Dashboard({ summary, latest_import }: Props) {
                                             </thead>
 
                                             <tbody className="divide-y">
-                                                {latest_import.positions.map((position) => (
-                                                    <tr key={position.id}>
-                                                        <td className="px-4 py-3">
-                                                            <div className="font-medium">
-                                                                {position.product}
-                                                            </div>
-
-                                                            {position.code && (
-                                                                <div className="text-xs text-muted-foreground">
-                                                                    Código: {position.code}
+                                                {latest_import.positions.map(
+                                                    (position) => (
+                                                        <tr key={position.id}>
+                                                            <td className="px-4 py-3">
+                                                                <div className="font-medium">
+                                                                    {
+                                                                        position.product
+                                                                    }
                                                                 </div>
-                                                            )}
-                                                        </td>
 
-                                                        <td className="px-4 py-3">
-                                                            {position.institution ?? '—'}
-                                                        </td>
+                                                                {position.code && (
+                                                                    <div className="text-muted-foreground text-xs">
+                                                                        Código:{' '}
+                                                                        {
+                                                                            position.code
+                                                                        }
+                                                                    </div>
+                                                                )}
+                                                            </td>
 
-                                                        <td className="px-4 py-3">
-                                                            {formatDate(position.maturity_date)}
-                                                        </td>
+                                                            <td className="px-4 py-3">
+                                                                {position.institution ??
+                                                                    '—'}
+                                                            </td>
 
-                                                        <td className="px-4 py-3 text-right font-medium">
-                                                            {formatCurrency(position.curve_value)}
-                                                        </td>
-                                                    </tr>
-                                                ))}
+                                                            <td className="px-4 py-3">
+                                                                {formatDate(
+                                                                    position.maturity_date,
+                                                                )}
+                                                            </td>
+
+                                                            <td className="px-4 py-3 text-right font-medium">
+                                                                {formatCurrency(
+                                                                    position.curve_value,
+                                                                )}
+                                                            </td>
+                                                        </tr>
+                                                    ),
+                                                )}
                                             </tbody>
                                         </table>
                                     </div>

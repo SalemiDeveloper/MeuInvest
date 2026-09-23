@@ -30,7 +30,8 @@ export default function DeleteUser() {
                 <div className="relative space-y-0.5 text-red-600 dark:text-red-100">
                     <p className="font-medium">Aviso</p>
                     <p className="text-sm">
-                        Por favor prossiga com cuidado, esta ação não pode ser desfeita.
+                        Por favor prossiga com cuidado, esta ação não pode ser
+                        desfeita.
                     </p>
                 </div>
 
@@ -48,8 +49,10 @@ export default function DeleteUser() {
                             Tem certeza que deseja deletar sua conta ?
                         </DialogTitle>
                         <DialogDescription>
-                            Uma vez deletada, todos os seus recursos e dados também serão permanentemente apagados.
-                            Por favor informe sua senha para confirmar a exclusão permanente da sua conta.
+                            Uma vez deletada, todos os seus recursos e dados
+                            também serão permanentemente apagados. Por favor
+                            informe sua senha para confirmar a exclusão
+                            permanente da sua conta.
                         </DialogDescription>
 
                         <Form

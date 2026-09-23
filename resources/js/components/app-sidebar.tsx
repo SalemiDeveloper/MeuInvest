@@ -3,12 +3,12 @@ import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
-import { 
-    FileUp, 
-    FileText, 
-    LayoutGrid, 
+import {
+    FileUp,
+    FileText,
+    LayoutGrid,
     ChartNoAxesCombined,
-    ChartLine, 
+    ChartLine,
     CircleDollarSign,
     CircleHelp,
 } from 'lucide-react';

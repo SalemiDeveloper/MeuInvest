@@ -1,10 +1,5 @@
 import { Head, router } from '@inertiajs/react';
-import {
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
     CartesianGrid,
     Line,
@@ -57,8 +52,6 @@ type Props = {
     selectedId: number | null;
     summary: Summary;
 };
-
-
 
 function formatDate(value: string | null): string {
     if (!value) {
@@ -116,18 +109,13 @@ function formatReferencePeriod(value: string | null): string {
         return value;
     }
 
-    const date = new Date(
-        Number(year),
-        Number(month) - 1,
-        1,
-    );
+    const date = new Date(Number(year), Number(month) - 1, 1);
 
     return new Intl.DateTimeFormat('pt-BR', {
         month: 'long',
         year: 'numeric',
     }).format(date);
 }
-
 
 function getVariationClass(value: string | null): string {
     if (value === null) {
@@ -147,7 +135,6 @@ function getVariationClass(value: string | null): string {
     return 'text-muted-foreground';
 }
 
-
 type InvestmentComboboxProps = {
     investments: InvestmentOption[];
     selectedId: number | null;
@@ -163,7 +150,9 @@ function InvestmentCombobox({
     const [search, setSearch] = useState('');
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const selectedInvestment = investments.find((investment) => investment.id === selectedId,);
+    const selectedInvestment = investments.find(
+        (investment) => investment.id === selectedId,
+    );
 
     const filteredInvestments = useMemo(() => {
         const normalizedSearch = search.trim().toLowerCase();
@@ -173,7 +162,6 @@ function InvestmentCombobox({
         }
 
         return investments.filter((investment) => {
-
             const searchableText = [
                 investment.product,
                 investment.institution ?? '',
@@ -190,15 +178,18 @@ function InvestmentCombobox({
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
-            if (containerRef.current && !containerRef.current.contains(event.target as Node,)) {
+            if (
+                containerRef.current &&
+                !containerRef.current.contains(event.target as Node)
+            ) {
                 setOpen(false);
             }
         }
 
-        document.addEventListener('mousedown', handleClickOutside,);
+        document.addEventListener('mousedown', handleClickOutside);
 
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside,);
+            document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
 
@@ -219,7 +210,7 @@ function InvestmentCombobox({
             <button
                 type="button"
                 onClick={() => setOpen((current) => !current)}
-                className="flex min-h-14 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-left shadow-sm transition-colors hover:bg-accent"
+                className="border-input bg-background hover:bg-accent flex min-h-14 w-full items-center justify-between rounded-md border px-3 py-2 text-left shadow-sm transition-colors"
             >
                 {selectedInvestment ? (
                     <span className="min-w-0">
@@ -227,33 +218,30 @@ function InvestmentCombobox({
                             {selectedInvestment.product}
                         </span>
 
-                        <span className="mt-1 block truncate text-xs text-muted-foreground">
-                            {selectedInvestment.institution ?? 'Instituição não informada'}
+                        <span className="text-muted-foreground mt-1 block truncate text-xs">
+                            {selectedInvestment.institution ??
+                                'Instituição não informada'}
                         </span>
                     </span>
                 ) : (
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-muted-foreground text-sm">
                         Selecione um investimento
                     </span>
                 )}
 
-                <span className="ml-3 text-xs text-muted-foreground">
-                    ▼
-                </span>
+                <span className="text-muted-foreground ml-3 text-xs">▼</span>
             </button>
 
             {open && (
-                <div className="absolute z-50 mt-2 w-full overflow-hidden rounded-md border border-border bg-popover text-popover-foreground shadow-lg">
+                <div className="border-border bg-popover text-popover-foreground absolute z-50 mt-2 w-full overflow-hidden rounded-md border shadow-lg">
                     <div className="border-b p-2">
                         <input
                             type="search"
                             value={search}
-                            onChange={(event) =>
-                                setSearch(event.target.value)
-                            }
+                            onChange={(event) => setSearch(event.target.value)}
                             placeholder="Pesquisar investimento..."
                             autoFocus
-                            className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                            className="border-input bg-background focus:ring-ring h-9 w-full rounded-md border px-3 text-sm outline-none focus:ring-2"
                         />
                     </div>
 
@@ -261,13 +249,13 @@ function InvestmentCombobox({
                         <button
                             type="button"
                             onClick={handleClear}
-                            className="w-full rounded-sm px-3 py-2 text-left text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                            className="text-muted-foreground hover:bg-accent hover:text-accent-foreground w-full rounded-sm px-3 py-2 text-left text-sm"
                         >
                             Limpar seleção
                         </button>
 
                         {filteredInvestments.length === 0 ? (
-                            <p className="px-3 py-4 text-center text-sm text-muted-foreground">
+                            <p className="text-muted-foreground px-3 py-4 text-center text-sm">
                                 Nenhum investimento encontrado.
                             </p>
                         ) : (
@@ -276,23 +264,31 @@ function InvestmentCombobox({
                                     <button
                                         key={investment.id}
                                         type="button"
-                                        onClick={() => handleSelect(investment.id)}
-                                        className={`cursor-pointer w-full rounded-sm px-3 py-2 text-left transition-colors hover:bg-accent hover:text-accent-foreground ${
-                                            investment.id === selectedId ? 'bg-accent' : ''
+                                        onClick={() =>
+                                            handleSelect(investment.id)
+                                        }
+                                        className={`hover:bg-accent hover:text-accent-foreground w-full cursor-pointer rounded-sm px-3 py-2 text-left transition-colors ${
+                                            investment.id === selectedId
+                                                ? 'bg-accent'
+                                                : ''
                                         }`}
                                     >
                                         <span className="block truncate text-sm font-medium">
                                             {investment.product}
                                         </span>
 
-                                        <span className="mt-1 block truncate text-xs text-muted-foreground">
+                                        <span className="text-muted-foreground mt-1 block truncate text-xs">
                                             {investment.institution ??
                                                 'Instituição não informada'}
                                         </span>
 
-                                        <span className="mt-1 block truncate text-xs text-muted-foreground">
-                                            {investment.maturity_date ? `Vencimento: ${formatDate(investment.maturity_date, )}` : 'Sem vencimento'}
-                                            {investment.code ? ` · Código: ${investment.code}` : ''}
+                                        <span className="text-muted-foreground mt-1 block truncate text-xs">
+                                            {investment.maturity_date
+                                                ? `Vencimento: ${formatDate(investment.maturity_date)}`
+                                                : 'Sem vencimento'}
+                                            {investment.code
+                                                ? ` · Código: ${investment.code}`
+                                                : ''}
                                         </span>
                                     </button>
                                 );
@@ -330,33 +326,34 @@ export default function Positions({
                         Histórico do investimento
                     </h1>
 
-                    <p className="mt-1 text-sm text-muted-foreground">
-                        Selecione um investimento para acompanhar seus valores nos relatórios importados.
+                    <p className="text-muted-foreground mt-1 text-sm">
+                        Selecione um investimento para acompanhar seus valores
+                        nos relatórios importados.
                     </p>
                 </div>
 
                 <div className="max-w-3xl space-y-2">
-                    <label className="text-sm font-medium">
-                        Investimento
-                    </label>
+                    <label className="text-sm font-medium">Investimento</label>
 
                     <InvestmentCombobox
                         investments={investments}
                         selectedId={selectedId}
                         onSelect={(investmentId) => {
-
                             if (!investmentId) {
-                                router.get('/investments/analysis/positions',);
+                                router.get('/investments/analysis/positions');
                                 return;
                             }
 
-                            router.get('/investments/analysis/positions', {investment: investmentId,},);
+                            router.get('/investments/analysis/positions', {
+                                investment: investmentId,
+                            });
                         }}
                     />
 
                     {investments.length === 0 && (
-                        <p className="text-sm text-muted-foreground">
-                            Nenhum investimento foi encontrado. Importe um relatório para começar.
+                        <p className="text-muted-foreground text-sm">
+                            Nenhum investimento foi encontrado. Importe um
+                            relatório para começar.
                         </p>
                     )}
                 </div>
@@ -367,28 +364,29 @@ export default function Positions({
                             Selecione um investimento
                         </h2>
 
-                        <p className="mt-1 text-sm text-muted-foreground">
-                            Escolha uma posição acima para visualizar seus detalhes e histórico.
+                        <p className="text-muted-foreground mt-1 text-sm">
+                            Escolha uma posição acima para visualizar seus
+                            detalhes e histórico.
                         </p>
                     </div>
                 )}
 
                 {selectedInvestment && (
                     <>
-                        <section className="max-w-4xl rounded-xl border bg-card p-6 text-card-foreground shadow-sm">
+                        <section className="bg-card text-card-foreground max-w-4xl rounded-xl border p-6 shadow-sm">
                             <div className="mb-5">
                                 <h2 className="text-lg font-semibold">
                                     Informações do investimento
                                 </h2>
 
-                                <p className="mt-1 text-sm text-muted-foreground">
+                                <p className="text-muted-foreground mt-1 text-sm">
                                     Dados registrados no relatório mais recente.
                                 </p>
                             </div>
 
                             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                                 <div>
-                                    <p className="text-sm text-muted-foreground">
+                                    <p className="text-muted-foreground text-sm">
                                         Produto
                                     </p>
 
@@ -398,62 +396,70 @@ export default function Positions({
                                 </div>
 
                                 <div>
-                                    <p className="text-sm text-muted-foreground">
+                                    <p className="text-muted-foreground text-sm">
                                         Instituição
                                     </p>
 
                                     <p className="mt-1 font-medium">
-                                        {selectedInvestment.institution ?? 'Não informado'}
+                                        {selectedInvestment.institution ??
+                                            'Não informado'}
                                     </p>
                                 </div>
 
                                 <div>
-                                    <p className="text-sm text-muted-foreground">
+                                    <p className="text-muted-foreground text-sm">
                                         Emissor
                                     </p>
 
                                     <p className="mt-1 font-medium">
-                                        {selectedInvestment.issuer ?? 'Não informado'}
+                                        {selectedInvestment.issuer ??
+                                            'Não informado'}
                                     </p>
                                 </div>
 
                                 <div>
-                                    <p className="text-sm text-muted-foreground">
+                                    <p className="text-muted-foreground text-sm">
                                         Código
                                     </p>
 
                                     <p className="mt-1 font-medium">
-                                        {selectedInvestment.code ?? 'Não informado'}
+                                        {selectedInvestment.code ??
+                                            'Não informado'}
                                     </p>
                                 </div>
 
                                 <div>
-                                    <p className="text-sm text-muted-foreground">
+                                    <p className="text-muted-foreground text-sm">
                                         Indexador
                                     </p>
 
                                     <p className="mt-1 font-medium">
-                                        {selectedInvestment.indexer ?? 'Não informado'}
+                                        {selectedInvestment.indexer ??
+                                            'Não informado'}
                                     </p>
                                 </div>
 
                                 <div>
-                                    <p className="text-sm text-muted-foreground">
+                                    <p className="text-muted-foreground text-sm">
                                         Data de emissão
                                     </p>
 
                                     <p className="mt-1 font-medium">
-                                        {formatDate(selectedInvestment.issued_at,)}
+                                        {formatDate(
+                                            selectedInvestment.issued_at,
+                                        )}
                                     </p>
                                 </div>
 
                                 <div>
-                                    <p className="text-sm text-muted-foreground">
+                                    <p className="text-muted-foreground text-sm">
                                         Vencimento
                                     </p>
 
                                     <p className="mt-1 font-medium">
-                                        {formatDate(selectedInvestment.maturity_date,)}
+                                        {formatDate(
+                                            selectedInvestment.maturity_date,
+                                        )}
                                     </p>
                                 </div>
                             </div>
@@ -461,45 +467,57 @@ export default function Positions({
 
                         {summary && (
                             <section className="grid gap-4 md:grid-cols-3">
-                                <div className="rounded-xl border bg-card p-5 shadow-sm">
-                                    <p className="text-sm text-muted-foreground">
+                                <div className="bg-card rounded-xl border p-5 shadow-sm">
+                                    <p className="text-muted-foreground text-sm">
                                         Primeiro valor registrado
                                     </p>
 
                                     <p className="mt-2 text-2xl font-semibold">
-                                        {formatCurrency(summary.first_value,)}
+                                        {formatCurrency(summary.first_value)}
                                     </p>
 
-                                    <p className="mt-1 text-xs text-muted-foreground">
-                                        {formatReferencePeriod(summary.first_period,)}
+                                    <p className="text-muted-foreground mt-1 text-xs">
+                                        {formatReferencePeriod(
+                                            summary.first_period,
+                                        )}
                                     </p>
                                 </div>
 
-                                <div className="rounded-xl border bg-card p-5 shadow-sm">
-                                    <p className="text-sm text-muted-foreground">
+                                <div className="bg-card rounded-xl border p-5 shadow-sm">
+                                    <p className="text-muted-foreground text-sm">
                                         Valor mais recente
                                     </p>
 
                                     <p className="mt-2 text-2xl font-semibold">
-                                        {formatCurrency(summary.latest_value,)}
+                                        {formatCurrency(summary.latest_value)}
                                     </p>
 
-                                    <p className="mt-1 text-xs text-muted-foreground">
-                                        {formatReferencePeriod(summary.latest_period,)}
+                                    <p className="text-muted-foreground mt-1 text-xs">
+                                        {formatReferencePeriod(
+                                            summary.latest_period,
+                                        )}
                                     </p>
                                 </div>
 
-                                <div className="rounded-xl border bg-card p-5 shadow-sm">
-                                    <p className="text-sm text-m+uted-foreground">
+                                <div className="bg-card rounded-xl border p-5 shadow-sm">
+                                    <p className="text-m+uted-foreground text-sm">
                                         Variação desde o primeiro registro
                                     </p>
 
-                                    <p className={`mt-2 text-2xl font-semibold ${getVariationClass(summary.total_difference,)}`}>
-                                        {formatDifference(summary.total_difference)}
+                                    <p
+                                        className={`mt-2 text-2xl font-semibold ${getVariationClass(summary.total_difference)}`}
+                                    >
+                                        {formatDifference(
+                                            summary.total_difference,
+                                        )}
                                     </p>
 
-                                    <p className={`mt-1 text-xs font-medium ${getVariationClass(summary.total_difference,)}`}>
-                                        {formatPercentage(summary.total_percentage_change)}
+                                    <p
+                                        className={`mt-1 text-xs font-medium ${getVariationClass(summary.total_difference)}`}
+                                    >
+                                        {formatPercentage(
+                                            summary.total_percentage_change,
+                                        )}
                                     </p>
                                 </div>
                             </section>
@@ -507,15 +525,15 @@ export default function Positions({
 
                         {history.length > 0 && (
                             <>
-                                <section className="rounded-xl border bg-card p-6 shadow-sm">
+                                <section className="bg-card rounded-xl border p-6 shadow-sm">
                                     <div className="mb-6">
                                         <h2 className="text-lg font-semibold">
                                             Evolução do valor
                                         </h2>
 
-                                        <p className="mt-1 text-sm text-muted-foreground">
-                                            Histórico do Valor Atualizado
-                                            CURVA nos relatórios encontrados.
+                                        <p className="text-muted-foreground mt-1 text-sm">
+                                            Histórico do Valor Atualizado CURVA
+                                            nos relatórios encontrados.
                                         </p>
                                     </div>
 
@@ -550,26 +568,39 @@ export default function Positions({
                                                 />
 
                                                 <Tooltip
-                                                    content={({active, payload, }) => {
-
-                                                        if (!active || !payload || payload.length === 0) {
+                                                    content={({
+                                                        active,
+                                                        payload,
+                                                    }) => {
+                                                        if (
+                                                            !active ||
+                                                            !payload ||
+                                                            payload.length === 0
+                                                        ) {
                                                             return null;
                                                         }
 
-                                                        const value = Number(payload[0].value ?? 0,);
-                                                        const data = payload[0].payload as {period: string; value: number;};
+                                                        const value = Number(
+                                                            payload[0].value ??
+                                                                0,
+                                                        );
+                                                        const data = payload[0]
+                                                            .payload as {
+                                                            period: string;
+                                                            value: number;
+                                                        };
 
                                                         return (
-                                                            <div className="rounded-lg border bg-background px-4 py-3 shadow-md">
+                                                            <div className="bg-background rounded-lg border px-4 py-3 shadow-md">
                                                                 <p className="text-sm font-medium">
                                                                     {
                                                                         data.period
                                                                     }
                                                                 </p>
 
-                                                                <p className="mt-1 text-sm text-muted-foreground">
+                                                                <p className="text-muted-foreground mt-1 text-sm">
                                                                     Valor total:{' '}
-                                                                    <span className="font-semibold text-foreground">
+                                                                    <span className="text-foreground font-semibold">
                                                                         {formatCurrency(
                                                                             value,
                                                                         )}
@@ -594,13 +625,13 @@ export default function Positions({
                                     </div>
                                 </section>
 
-                                <section className="rounded-xl border bg-card shadow-sm">
+                                <section className="bg-card rounded-xl border shadow-sm">
                                     <div className="border-b p-6">
                                         <h2 className="text-lg font-semibold">
                                             Histórico de valores
                                         </h2>
 
-                                        <p className="mt-1 text-sm text-muted-foreground">
+                                        <p className="text-muted-foreground mt-1 text-sm">
                                             Valores registrados em cada
                                             relatório importado.
                                         </p>
@@ -609,7 +640,7 @@ export default function Positions({
                                     <div className="overflow-x-auto">
                                         <table className="w-full text-sm">
                                             <thead>
-                                                <tr className="border-b text-left text-muted-foreground">
+                                                <tr className="text-muted-foreground border-b text-left">
                                                     <th className="px-6 py-4 font-medium">
                                                         Período
                                                     </th>
@@ -630,22 +661,38 @@ export default function Positions({
 
                                             <tbody>
                                                 {tableData.map((item) => (
-                                                    <tr key={item.reference_period} className="border-b last:border-0">
-
+                                                    <tr
+                                                        key={
+                                                            item.reference_period
+                                                        }
+                                                        className="border-b last:border-0"
+                                                    >
                                                         <td className="px-6 py-4 font-medium">
-                                                            {formatReferencePeriod(item.reference_period,)}
+                                                            {formatReferencePeriod(
+                                                                item.reference_period,
+                                                            )}
                                                         </td>
 
                                                         <td className="px-6 py-4 text-right">
-                                                            {formatCurrency(item.value,)}
+                                                            {formatCurrency(
+                                                                item.value,
+                                                            )}
                                                         </td>
 
-                                                        <td className={`px-6 py-4 text-right font-medium ${getVariationClass(item.difference,)}`}>
-                                                            {formatDifference(item.difference)}
+                                                        <td
+                                                            className={`px-6 py-4 text-right font-medium ${getVariationClass(item.difference)}`}
+                                                        >
+                                                            {formatDifference(
+                                                                item.difference,
+                                                            )}
                                                         </td>
 
-                                                        <td className={`px-6 py-4 text-right font-medium ${getVariationClass(item.percentage_change,)}`}>
-                                                            {formatPercentage(item.percentage_change)}
+                                                        <td
+                                                            className={`px-6 py-4 text-right font-medium ${getVariationClass(item.percentage_change)}`}
+                                                        >
+                                                            {formatPercentage(
+                                                                item.percentage_change,
+                                                            )}
                                                         </td>
                                                     </tr>
                                                 ))}
@@ -654,12 +701,12 @@ export default function Positions({
                                     </div>
                                 </section>
 
-                                <p className="text-xs text-muted-foreground">
-                                    Os valores e as variações são baseados
-                                    no campo Valor Atualizado CURVA dos
-                                    relatórios importados. Eles não
-                                    representam necessariamente a
-                                    rentabilidade líquida do investimento.
+                                <p className="text-muted-foreground text-xs">
+                                    Os valores e as variações são baseados no
+                                    campo Valor Atualizado CURVA dos relatórios
+                                    importados. Eles não representam
+                                    necessariamente a rentabilidade líquida do
+                                    investimento.
                                 </p>
                             </>
                         )}
@@ -670,9 +717,9 @@ export default function Positions({
                                     Histórico não encontrado
                                 </h2>
 
-                                <p className="mt-1 text-sm text-muted-foreground">
-                                    Não foi possível localizar esse
-                                    investimento nos relatórios disponíveis.
+                                <p className="text-muted-foreground mt-1 text-sm">
+                                    Não foi possível localizar esse investimento
+                                    nos relatórios disponíveis.
                                 </p>
                             </div>
                         )}

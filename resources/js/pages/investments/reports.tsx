@@ -29,7 +29,6 @@ function formatDate(value: string): string {
 }
 
 export default function Reports({ imports }: Props) {
-
     function handleDelete(investmentImport: InvestmentImport) {
         const confirmed = window.confirm(
             `Deseja realmente excluir o relatório de ${formatReferencePeriod(
@@ -50,7 +49,7 @@ export default function Reports({ imports }: Props) {
         <>
             <Head title="Relatórios" />
 
-            <div className="flex min-w-0 w-full flex-1 flex-col gap-6 p-4">
+            <div className="flex w-full min-w-0 flex-1 flex-col gap-6 p-4">
                 <div>
                     <h1 className="text-2xl font-semibold tracking-tight">
                         Relatórios
@@ -63,21 +62,21 @@ export default function Reports({ imports }: Props) {
 
                 {imports.length === 0 ? (
                     <div className="flex flex-col items-center justify-center rounded-xl border border-dashed p-10 text-center">
-                        <FileText className="mb-4 size-10 text-muted-foreground" />
+                        <FileText className="text-muted-foreground mb-4 size-10" />
 
                         <h2 className="text-lg font-medium">
                             Nenhum relatório importado
                         </h2>
 
-                        <p className="mt-1 text-sm text-muted-foreground">
+                        <p className="text-muted-foreground mt-1 text-sm">
                             Importe seu primeiro relatório mensal para começar.
                         </p>
                     </div>
                 ) : (
-                    <div className="min-w-0 w-full overflow-hidden rounded-xl border">
+                    <div className="w-full min-w-0 overflow-hidden rounded-xl border">
                         <div className="w-full overflow-x-auto">
                             <table className="w-full min-w-[700px] text-sm">
-                                <thead className="border-b bg-muted/50">
+                                <thead className="bg-muted/50 border-b">
                                     <tr>
                                         <th className="px-4 py-3 text-left font-medium">
                                             Período
@@ -114,12 +113,16 @@ export default function Reports({ imports }: Props) {
 
                                             <td className="max-w-[320px] px-4 py-3">
                                                 <span className="block truncate">
-                                                    {investmentImport.original_filename}
+                                                    {
+                                                        investmentImport.original_filename
+                                                    }
                                                 </span>
                                             </td>
 
                                             <td className="px-4 py-3">
-                                                {investmentImport.positions_count}
+                                                {
+                                                    investmentImport.positions_count
+                                                }
                                             </td>
 
                                             <td className="px-4 py-3">
@@ -131,8 +134,12 @@ export default function Reports({ imports }: Props) {
                                             <td className="px-4 py-3 text-right">
                                                 <button
                                                     type="button"
-                                                    onClick={() => handleDelete(investmentImport)}
-                                                    className="cursor-pointer inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-500/10 dark:text-red-400"
+                                                    onClick={() =>
+                                                        handleDelete(
+                                                            investmentImport,
+                                                        )
+                                                    }
+                                                    className="inline-flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-500/10 dark:text-red-400"
                                                 >
                                                     <Trash2 className="size-4" />
                                                     <span>Excluir</span>

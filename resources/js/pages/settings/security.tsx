@@ -111,7 +111,7 @@ export default function Security(props: Props) {
                                 />
                             </div>
 
-                            <div className=" cursor-pointer flex items-center gap-4">
+                            <div className="flex cursor-pointer items-center gap-4">
                                 <Button
                                     disabled={processing}
                                     data-test="update-password-button"

@@ -14,10 +14,7 @@ export default function Import() {
     const [error, setError] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const { flash, import_results } = usePage<{
-        flash: {
-            success?: string;
-        };
+    const { import_results } = usePage<{
         import_results?: ImportResult[];
     }>().props;
 
@@ -86,7 +83,7 @@ export default function Import() {
                         Importar relatório
                     </h1>
 
-                    <p className="mt-2 text-muted-foreground">
+                    <p className="text-muted-foreground mt-2">
                         Importe um relatório mensal da B3 para atualizar seu
                         histórico de investimentos.
                     </p>
@@ -104,14 +101,14 @@ export default function Import() {
                                 className={
                                     result.success
                                         ? 'rounded-lg border border-green-500/30 bg-green-500/10 p-4'
-                                        : 'rounded-lg border border-destructive/30 bg-destructive/10 p-4'
+                                        : 'border-destructive/30 bg-destructive/10 rounded-lg border p-4'
                                 }
                             >
                                 <p
                                     className={
                                         result.success
                                             ? 'text-sm font-medium text-green-700 dark:text-green-400'
-                                            : 'text-sm font-medium text-destructive'
+                                            : 'text-destructive text-sm font-medium'
                                     }
                                 >
                                     {result.success ? '✓ ' : '✕ '}
@@ -122,14 +119,14 @@ export default function Import() {
                                     className={
                                         result.success
                                             ? 'mt-1 text-sm text-green-700/80 dark:text-green-400/80'
-                                            : 'mt-1 text-sm text-destructive/80'
+                                            : 'text-destructive/80 mt-1 text-sm'
                                     }
                                 >
                                     {result.message}
                                 </p>
 
                                 {result.success && (
-                                    <p className="mt-1 text-xs text-muted-foreground">
+                                    <p className="text-muted-foreground mt-1 text-xs">
                                         {result.positions_count}{' '}
                                         {result.positions_count === 1
                                             ? 'posição processada.'
@@ -141,9 +138,9 @@ export default function Import() {
                     </div>
                 )}
 
-                <div className="max-w-3xl rounded-xl border border-sidebar-border/70 p-6 dark:border-sidebar-border">
+                <div className="border-sidebar-border/70 dark:border-sidebar-border max-w-3xl rounded-xl border p-6">
                     <div className="flex items-start gap-4">
-                        <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted">
+                        <div className="bg-muted flex size-10 shrink-0 items-center justify-center rounded-lg">
                             <FileSpreadsheet className="size-5" />
                         </div>
 
@@ -152,9 +149,9 @@ export default function Import() {
                                 Selecionar relatório
                             </h2>
 
-                            <p className="mt-1 text-sm text-muted-foreground">
-                                Selecione um arquivo mensal disponibilizado
-                                pela B3 no formato Excel.
+                            <p className="text-muted-foreground mt-1 text-sm">
+                                Selecione um arquivo mensal disponibilizado pela
+                                B3 no formato Excel.
                             </p>
                         </div>
                     </div>
@@ -162,15 +159,15 @@ export default function Import() {
                     <div className="mt-6">
                         <label
                             htmlFor="report-file"
-                            className="flex cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-sidebar-border/70 px-6 py-10 text-center transition-colors hover:bg-muted/50"
+                            className="border-sidebar-border/70 hover:bg-muted/50 flex cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed px-6 py-10 text-center transition-colors"
                         >
-                            <Upload className="mb-3 size-8 text-muted-foreground" />
+                            <Upload className="text-muted-foreground mb-3 size-8" />
 
                             <span className="font-medium">
                                 Clique para selecionar os arquivos
                             </span>
 
-                            <span className="mt-1 text-sm text-muted-foreground">
+                            <span className="text-muted-foreground mt-1 text-sm">
                                 Apenas arquivos .xlsx
                             </span>
 
@@ -187,7 +184,7 @@ export default function Import() {
                     </div>
 
                     {selectedFiles.length > 0 && (
-                        <div className="mt-4 rounded-lg bg-muted/50 p-4">
+                        <div className="bg-muted/50 mt-4 rounded-lg p-4">
                             <p className="text-sm font-medium">
                                 Arquivos selecionados ({selectedFiles.length})
                             </p>
@@ -196,19 +193,24 @@ export default function Import() {
                                 {selectedFiles.map((file) => (
                                     <div
                                         key={`${file.name}-${file.size}-${file.lastModified}`}
-                                        className="flex items-center justify-between gap-4 rounded-md border border-border/60 bg-background px-3 py-2"
+                                        className="border-border/60 bg-background flex items-center justify-between gap-4 rounded-md border px-3 py-2"
                                     >
                                         <div className="min-w-0">
-                                            <p className="break-all text-sm">
+                                            <p className="text-sm break-all">
                                                 {file.name}
                                             </p>
 
-                                            <p className="mt-1 text-xs text-muted-foreground">
-                                                {(file.size / 1024 / 1024).toFixed(2)} MB
+                                            <p className="text-muted-foreground mt-1 text-xs">
+                                                {(
+                                                    file.size /
+                                                    1024 /
+                                                    1024
+                                                ).toFixed(2)}{' '}
+                                                MB
                                             </p>
                                         </div>
 
-                                        <FileSpreadsheet className="size-4 shrink-0 text-muted-foreground" />
+                                        <FileSpreadsheet className="text-muted-foreground size-4 shrink-0" />
                                     </div>
                                 ))}
                             </div>
@@ -216,13 +218,11 @@ export default function Import() {
                     )}
 
                     {error && (
-                        <p className="mt-4 text-sm text-destructive">
-                            {error}
-                        </p>
+                        <p className="text-destructive mt-4 text-sm">{error}</p>
                     )}
 
                     {errors.files && (
-                        <p className="mt-4 text-sm text-destructive">
+                        <p className="text-destructive mt-4 text-sm">
                             {errors.files}
                         </p>
                     )}
@@ -232,10 +232,12 @@ export default function Import() {
                             type="button"
                             disabled={selectedFiles.length === 0 || processing}
                             onClick={handleSubmit}
-                            className="cursor-pointer inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                            className="bg-primary text-primary-foreground inline-flex cursor-pointer items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                             <Upload className="size-4" />
-                            {processing ? 'Importando...' : 'Importar relatórios'}
+                            {processing
+                                ? 'Importando...'
+                                : 'Importar relatórios'}
                         </button>
                     </div>
                 </div>

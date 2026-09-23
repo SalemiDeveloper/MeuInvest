@@ -13,7 +13,8 @@ export default function VerifyEmail({ status }: { status?: string }) {
 
             {status === 'verification-link-sent' && (
                 <div className="mb-4 text-center text-sm font-medium text-green-600">
-                    Um link de verificação foi enviado para o endereço de email fornecido no cadastro da conta.
+                    Um link de verificação foi enviado para o endereço de email
+                    fornecido no cadastro da conta.
                 </div>
             )}
 
