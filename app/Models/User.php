@@ -38,7 +38,7 @@ class User extends Authenticatable implements PasskeyUser
     /**
      * Get the investment imports for the user.
      *
-     * @return HasMany<InvestmentImport, User>
+     * @return HasMany<InvestmentImport, $this>
      */
     public function investmentImports(): HasMany
     {

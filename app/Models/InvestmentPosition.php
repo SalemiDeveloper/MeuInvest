@@ -22,7 +22,7 @@ class InvestmentPosition extends Model
     /**
      * Get the import that owns the investment position.
      *
-     * @return BelongsTo<InvestmentImport, InvestmentPosition>
+     * @return BelongsTo<InvestmentImport, $this>
      */
     public function investmentImport(): BelongsTo
     {

@@ -18,7 +18,7 @@ class InvestmentImport extends Model
     /**
      * Get the user that owns the import.
      *
-     * @return BelongsTo<User, InvestmentImport>
+     * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
     {
@@ -28,7 +28,7 @@ class InvestmentImport extends Model
     /**
      * Get the investment positions for the import.
      *
-     * @return HasMany<InvestmentPosition, InvestmentImport>
+     * @return HasMany<InvestmentPosition, $this>
      */
     public function positions(): HasMany
     {
