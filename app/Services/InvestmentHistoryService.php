@@ -139,11 +139,16 @@ class InvestmentHistoryService
         $totalPercentageChange = null;
 
         if ($firstValue !== null && $latestValue !== null) {
-            $totalDifference = $latestValue - $firstValue;
+            $totalDifference = number_format(
+                $latestValue - $firstValue,
+                2,
+                '.',
+                '',
+            );
 
             if ($firstValue != 0) {
                 $totalPercentageChange = number_format(
-                    ($totalDifference / $firstValue) * 100,
+                    (($latestValue - $firstValue) / $firstValue) * 100,
                     2,
                     '.',
                     '',
@@ -161,9 +166,10 @@ class InvestmentHistoryService
             'latest_value' => $latestValue !== null
                 ? number_format($latestValue, 2, '.', '')
                 : null,
-            'total_difference' => $totalDifference !== null
-                ? number_format($totalDifference, 2, '.', '')
-                : null,
+            // 'total_difference' => $totalDifference !== null
+            //     ? number_format($totalDifference, 2, '.', '')
+            //     : null,
+            'total_difference' => $totalDifference,
             // 'total_percentage_change' => $totalPercentageChange !== null
             //     ? number_format($totalPercentageChange, 2, '.', '')
             //     : null,
