@@ -127,36 +127,36 @@ class InvestmentHistoryService
             : null;
 
         // ------------------------------------------------------
-        // $totalDifference = $firstValue !== null && $latestValue !== null
-        //     ? $latestValue - $firstValue
-        //     : null;
+        $totalDifference = $firstValue !== null && $latestValue !== null
+            ? $latestValue - $firstValue
+            : null;
 
-        // $totalPercentageChange = $firstValue !== null
-        //     && $firstValue != 0
-        //     && $totalDifference !== null
-        //     ? ($totalDifference / $firstValue) * 100
-        //     : null;
+        $totalPercentageChange = $firstValue !== null
+            && $firstValue != 0
+            && $totalDifference !== null
+            ? ($totalDifference / $firstValue) * 100
+            : null;
 
-        $totalDifference = null;
-        $totalPercentageChange = null;
+        // $totalDifference = null;
+        // $totalPercentageChange = null;
 
-        if ($firstValue !== null && $latestValue !== null) {
-            $totalDifference = number_format(
-                $latestValue - $firstValue,
-                2,
-                '.',
-                '',
-            );
+        // if ($firstValue !== null && $latestValue !== null) {
+        //     $totalDifference = number_format(
+        //         $latestValue - $firstValue,
+        //         2,
+        //         '.',
+        //         '',
+        //     );
 
-            if ($firstValue != 0) {
-                $totalPercentageChange = number_format(
-                    (($latestValue - $firstValue) / $firstValue) * 100,
-                    2,
-                    '.',
-                    '',
-                );
-            }
-        }
+        //     if ($firstValue != 0) {
+        //         $totalPercentageChange = number_format(
+        //             (($latestValue - $firstValue) / $firstValue) * 100,
+        //             2,
+        //             '.',
+        //             '',
+        //         );
+        //     }
+        // }
 
         // ------------------------------------------------------
 
@@ -168,14 +168,14 @@ class InvestmentHistoryService
             'latest_value' => $latestValue !== null
                 ? number_format($latestValue, 2, '.', '')
                 : null,
-            // 'total_difference' => $totalDifference !== null
-            //     ? number_format($totalDifference, 2, '.', '')
-            //     : null,
-            'total_difference' => $totalDifference,
-            // 'total_percentage_change' => $totalPercentageChange !== null
-            //     ? number_format($totalPercentageChange, 2, '.', '')
-            //     : null,
-            'total_percentage_change' => $totalPercentageChange,
+            'total_difference' => $totalDifference !== null
+                ? number_format($totalDifference, 2, '.', '')
+                : null,
+            // 'total_difference' => $totalDifference,
+            'total_percentage_change' => $totalPercentageChange !== null
+                ? number_format($totalPercentageChange, 2, '.', '')
+                : null,
+            // 'total_percentage_change' => $totalPercentageChange,
         ];
     }
 
