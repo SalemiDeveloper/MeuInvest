@@ -85,11 +85,17 @@ class InvestmentImportController extends Controller
                 * 2. Salva temporariamente o arquivo para que
                 * o PhpSpreadsheet possa abri-lo.
                 */
+                // $temporaryPath = $file->store(
+                //     'investment-reports/tmp'
+                // );
+
+                // $absolutePath = Storage::path($temporaryPath);
                 $temporaryPath = $file->store(
-                    'investment-reports/tmp'
+                    'investment-reports/tmp',
+                    'temporary'
                 );
 
-                $absolutePath = Storage::path($temporaryPath);
+                $absolutePath = Storage::disk('temporary')->path($temporaryPath);
 
                 /*
                 * 3. Lê a aba e extrai as posições.
@@ -156,7 +162,8 @@ class InvestmentImportController extends Controller
                 /*
                 * 6. Remove o arquivo temporário.
                 */
-                Storage::delete($temporaryPath);
+                // Storage::delete($temporaryPath);
+                Storage::disk('temporary')->delete($temporaryPath);
                 $temporaryPath = null;
 
                 $results[] = [
@@ -169,8 +176,11 @@ class InvestmentImportController extends Controller
                     'positions_count' => count($positions),
                 ];
             } catch (InvalidArgumentException|RuntimeException $exception) {
+                // if ($temporaryPath !== null) {
+                //     Storage::delete($temporaryPath);
+                // }
                 if ($temporaryPath !== null) {
-                    Storage::delete($temporaryPath);
+                    Storage::disk('temporary')->delete($temporaryPath);
                 }
 
                 $results[] = [
@@ -180,8 +190,11 @@ class InvestmentImportController extends Controller
                     'positions_count' => 0,
                 ];
             } catch (Throwable $exception) {
+                // if ($temporaryPath !== null) {
+                //     Storage::delete($temporaryPath);
+                // }
                 if ($temporaryPath !== null) {
-                    Storage::delete($temporaryPath);
+                    Storage::disk('temporary')->delete($temporaryPath);
                 }
 
                 report($exception);
