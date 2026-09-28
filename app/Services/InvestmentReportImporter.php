@@ -22,7 +22,7 @@ class InvestmentReportImporter
      */
     public function extractReferencePeriod(string $filename): array
     {
-        $pattern = '/^relatorio-consolidado-mensal-(\d{4})-([a-zç]+)(?:\(\d+\))?\.xlsx$/iu';
+        $pattern = '/^relatorio-consolidado-mensal-(\d{4})-([a-zç]+)(?:\s*\(\d+\))?\.xlsx$/iu';
 
         if (! preg_match($pattern, $filename, $matches)) {
             throw new InvalidArgumentException(
@@ -36,7 +36,7 @@ class InvestmentReportImporter
         $months = [
             'janeiro' => 1,
             'fevereiro' => 2,
-            'março' => 3,
+            'marco' => 3,
             'abril' => 4,
             'maio' => 5,
             'junho' => 6,
